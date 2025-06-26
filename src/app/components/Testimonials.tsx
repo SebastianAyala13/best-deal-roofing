@@ -30,9 +30,12 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="bg-pattern bg-slate-50 py-16 px-4" id="testimonials">
+    <section
+      id="testimonials"
+      className="py-16 px-4 bg-white/20 backdrop-blur-md"
+    >
       <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-10 text-slate-900">
+        <h2 className="text-3xl font-bold mb-10 text-slate-900 drop-shadow-md">
           {language === 'en' ? 'What our clients say' : 'Lo que dicen nuestros clientes'}
         </h2>
 
@@ -40,7 +43,7 @@ export default function Testimonials() {
           {testimonials.map((t, idx) => (
             <div
               key={idx}
-              className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition"
+              className="bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition"
             >
               <p className="text-slate-700 text-sm italic leading-relaxed">“{t.text[language]}”</p>
               <p className="mt-4 text-sm font-semibold text-yellow-600">— {t.name}</p>

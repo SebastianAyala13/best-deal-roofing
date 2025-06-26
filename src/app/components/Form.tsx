@@ -30,17 +30,17 @@ export default function Form() {
   };
 
   return (
-    <section
+      <section
       id="form-section"
-      className="bg-pattern bg-gradient-to-b from-slate-100 to-white py-20 px-4 sm:px-8"
+      className="py-20 px-4 sm:px-8"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-gray-200"
-      >
+        <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="max-w-2xl mx-auto bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-gray-200"
+    >
         <h2 className="text-4xl font-bold text-center text-slate-900 mb-6">
           Get Your Free Roofing Quote
         </h2>
@@ -48,7 +48,8 @@ export default function Form() {
           Fill in the form and our team will reach out to you shortly.
         </p>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <input
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="text"
             name="fullName"
             placeholder="Full Name"
@@ -57,7 +58,8 @@ export default function Form() {
             onChange={handleChange}
             required
           />
-          <input
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="email"
             name="email"
             placeholder="Email Address"
@@ -66,7 +68,8 @@ export default function Form() {
             onChange={handleChange}
             required
           />
-          <input
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="tel"
             name="phone"
             placeholder="Phone Number"
@@ -75,7 +78,8 @@ export default function Form() {
             onChange={handleChange}
             required
           />
-          <input
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="text"
             name="zip"
             placeholder="ZIP Code"
@@ -84,7 +88,8 @@ export default function Form() {
             onChange={handleChange}
             required
           />
-          <select
+          <motion.select
+            whileFocus={{ scale: 1.01 }}
             name="service"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.service}
@@ -95,7 +100,7 @@ export default function Form() {
             <option value="Roof Repair">Roof Repair</option>
             <option value="New Roof Installation">New Roof Installation</option>
             <option value="Inspection">Inspection</option>
-          </select>
+          </motion.select>
           <motion.button
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}

@@ -24,8 +24,12 @@ export default function Hero() {
   const t = content[language];
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex items-center justify-center px-6">
-      {/* Video Background (opcional si existe roofing.mp4) */}
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="relative min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex items-center justify-center px-6"
+    >
       <video
         autoPlay
         muted
@@ -34,10 +38,7 @@ export default function Hero() {
         className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none"
         src="/roofing.mp4"
       />
-
-      {/* Overlay */}
       <div className="absolute inset-0 bg-slate-900/50 z-0" />
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -49,13 +50,15 @@ export default function Hero() {
           <span className="text-yellow-400">{t.highlight}</span>
         </h1>
         <p className="text-lg sm:text-xl mb-8 text-gray-300">{t.subtitle}</p>
-        <a
+        <motion.a
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           href="#form-section"
           className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition"
         >
           {t.cta}
-        </a>
+        </motion.a>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }
