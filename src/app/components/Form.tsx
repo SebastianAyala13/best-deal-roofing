@@ -19,79 +19,53 @@ export default function Form() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Lead captured:', form);
-    setForm({
-      fullName: '',
-      email: '',
-      phone: '',
-      zip: '',
-      service: '',
-    });
+    setForm({ fullName: '', email: '', phone: '', zip: '', service: '' });
     alert('Thanks! Your request has been submitted.');
   };
 
   return (
-      <section
+    <motion.section
       id="form-section"
-      className="py-20 px-4 sm:px-8"
-    >
-        <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      className="relative px-4 sm:px-6 flex justify-center items-center min-h-[500px] bg-transparent"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 1.2 }}
       viewport={{ once: true }}
-      className="max-w-2xl mx-auto bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-gray-200"
     >
-        <h2 className="text-4xl font-bold text-center text-slate-900 mb-6">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+        viewport={{ once: true }}
+        className="max-w-lg w-full p-0"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-4 drop-shadow-md">
           Get Your Free Roofing Quote
         </h2>
-        <p className="text-center text-gray-600 mb-8">
+        <p className="text-center text-white/90 mb-6 text-sm drop-shadow-sm">
           Fill in the form and our team will reach out to you shortly.
         </p>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <motion.input
-            whileFocus={{ scale: 1.01 }}
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            value={form.fullName}
-            onChange={handleChange}
-            required
-          />
-          <motion.input
-            whileFocus={{ scale: 1.01 }}
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-          <motion.input
-            whileFocus={{ scale: 1.01 }}
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            value={form.phone}
-            onChange={handleChange}
-            required
-          />
-          <motion.input
-            whileFocus={{ scale: 1.01 }}
-            type="text"
-            name="zip"
-            placeholder="ZIP Code"
-            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            value={form.zip}
-            onChange={handleChange}
-            required
-          />
+          {["fullName", "email", "phone", "zip"].map((field) => (
+            <motion.input
+              key={field}
+              whileFocus={{ scale: 1.01 }}
+              type={field === "email" ? "email" : field === "phone" ? "tel" : "text"}
+              name={field}
+              placeholder={field
+                .replace(/([A-Z])/g, ' $1')
+                .replace(/^./, str => str.toUpperCase())}
+              className="w-full px-5 py-3 bg-white/80 text-slate-800 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              value={form[field as keyof typeof form]}
+              onChange={handleChange}
+              required
+            />
+          ))}
+
           <motion.select
             whileFocus={{ scale: 1.01 }}
             name="service"
-            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            className="w-full px-5 py-3 bg-white/80 text-slate-800 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.service}
             onChange={handleChange}
             required
@@ -101,6 +75,7 @@ export default function Form() {
             <option value="New Roof Installation">New Roof Installation</option>
             <option value="Inspection">Inspection</option>
           </motion.select>
+
           <motion.button
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
@@ -111,6 +86,6 @@ export default function Form() {
           </motion.button>
         </form>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

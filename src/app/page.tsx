@@ -28,24 +28,21 @@ export default function Home() {
       <TrustSection />
 
       {/* Form with video background visible */}
-      <section
-        id="form-section"
-        className="py-20 px-4 backdrop-blur-md bg-white/20"
-      >
+      <section id="form-section" className="py-20 px-4 bg-transparent">
         <Form />
       </section>
 
       <ReviewSection />
 
       {/* Testimonials with transparent blur background */}
-      <section className="py-16 px-4 backdrop-blur-md bg-white/20" id="testimonials">
+      <section className="py-16 px-4 bg-white/10 backdrop-blur-md" id="testimonials">
         <Testimonials />
       </section>
 
       {/* FAQ Section with video background visible */}
       <section
         id="faq"
-        className="py-16 px-4 backdrop-blur-md bg-white/20 text-slate-800"
+        className="py-16 px-4 bg-white/10 backdrop-blur-md text-slate-800"
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 drop-shadow-md">
           Frequently Asked Questions
