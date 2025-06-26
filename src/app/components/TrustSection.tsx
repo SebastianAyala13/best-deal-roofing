@@ -71,7 +71,7 @@ export default function TrustSection() {
             className="mb-10"
           >
             <p className="text-lg italic text-slate-100 max-w-xl mx-auto">
-              "{reviews[current].text}"
+              &quot;{reviews[current].text}&quot;
             </p>
             <p className="mt-3 font-semibold text-yellow-400">– {reviews[current].name}</p>
           </motion.div>
