@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#FBBF24" />
         <meta name="author" content="Best Deal Roofing Team" />
         <link rel="canonical" href="https://www.bestdealroofing.xyz/" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
 
