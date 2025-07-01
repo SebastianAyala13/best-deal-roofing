@@ -28,27 +28,31 @@ export default function Header() {
         </Link>
 
         {/* Menú + idioma */}
-        <div className="flex items-center space-x-6">
-          <nav className="hidden sm:flex space-x-6 text-sm text-slate-700 font-medium">
-            <a href="#form-section" className="hover:text-yellow-500 transition">
-              {language === 'en' ? 'Free Quote' : 'Cotización'}
-            </a>
-            <a href="#benefits" className="hover:text-yellow-500 transition">
-              {language === 'en' ? 'Why Us' : 'Por qué elegirnos'}
-            </a>
-            <a href="#footer" className="hover:text-yellow-500 transition">
-              {language === 'en' ? 'Contact' : 'Contacto'}
-            </a>
-          </nav>
+          <div className="flex items-center space-x-6">
+            <nav className="hidden sm:flex space-x-6 text-sm text-slate-700 font-medium">
+              <a href="#form-section" className="hover:text-yellow-500 transition">
+                {language === 'en' ? 'Free Quote' : 'Cotización'}
+              </a>
+              <a href="#benefits" className="hover:text-yellow-500 transition">
+                {language === 'en' ? 'Why Us' : 'Por qué elegirnos'}
+              </a>
+              <a href="#projects" className="hover:text-yellow-500 transition">
+                {language === 'en' ? 'Projects' : 'Proyectos'}
+              </a>
+              <a href="#footer" className="hover:text-yellow-500 transition">
+                {language === 'en' ? 'Contact' : 'Contacto'}
+              </a>
+            </nav>
 
-          <button
-            onClick={toggleLanguage}
-            aria-label="Toggle language"
-            className="text-sm font-semibold text-slate-700 hover:text-yellow-500 transition"
-          >
-            {language === 'en' ? 'ES' : 'EN'}
-          </button>
-        </div>
+            <button
+              onClick={toggleLanguage}
+              aria-label="Toggle language"
+              className="text-sm font-semibold text-slate-700 hover:text-yellow-500 transition"
+            >
+              {language === 'en' ? 'ES' : 'EN'}
+            </button>
+          </div>
+
       </div>
     </header>
   );

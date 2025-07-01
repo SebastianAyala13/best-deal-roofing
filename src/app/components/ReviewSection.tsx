@@ -21,13 +21,13 @@ export default function ReviewSection() {
       author: '– Alicia R., Texas ⭐⭐⭐⭐⭐',
     },
     {
-      logo: '/facebook-logo.png',
+      logo: '/google-logo.png',
       alt: 'Facebook Reviews',
       text: '“We just bought our home in Miami and needed a full roof replacement. Fast, affordable and super professional. 10/10.”',
       author: '– James T., Florida ⭐⭐⭐⭐⭐',
     },
     {
-      logo: '/linkedin-logo.png',
+      logo: '/google-logo.png',
       alt: 'LinkedIn Reviews',
       text: '“Reliable roofing company in California. Great communication and they cleaned up everything after the job. Our HOA was impressed.”',
       author: '– Carla G., California ⭐⭐⭐⭐⭐',
@@ -39,13 +39,13 @@ export default function ReviewSection() {
       author: '– David P., Georgia ⭐⭐⭐⭐⭐',
     },
     {
-      logo: '/facebook-logo.png',
+      logo: '/google-logo.png',
       alt: 'Facebook Reviews',
       text: '“I’m a single mom and was scared of roofing scams. Best Deal Roofing was kind, honest, and super transparent. Highly recommended.”',
       author: '– Jessica M., North Carolina ⭐⭐⭐⭐⭐',
     },
     {
-      logo: '/linkedin-logo.png',
+      logo: '/google-logo.png',
       alt: 'LinkedIn Reviews',
       text: '“As a realtor, I’ve worked with many contractors. These guys are on another level. Quick, clean and competitive prices.”',
       author: '– Robert S., Nevada ⭐⭐⭐⭐⭐',
