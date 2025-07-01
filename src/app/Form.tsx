@@ -12,7 +12,9 @@ export default function Form() {
     service: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -30,28 +32,32 @@ export default function Form() {
   };
 
   return (
-    <section
+    <motion.section
       id="form-section"
-      className="bg-gradient-to-b from-slate-100 to-white py-20 px-4 sm:px-8"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="py-20 px-4 sm:px-8 flex justify-center items-center"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-gray-200"
-      >
+      <div className="w-full max-w-xl bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-200">
         <h2 className="text-4xl font-bold text-center text-slate-900 mb-6">
           Get Your Free Roofing Quote
         </h2>
         <p className="text-center text-gray-600 mb-8">
           Fill in the form and our team will reach out to you shortly.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+          aria-label="Free Roofing Quote Form"
+        >
           <input
             type="text"
             name="fullName"
             placeholder="Full Name"
+            aria-label="Full Name"
+            autoComplete="name"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.fullName}
             onChange={handleChange}
@@ -61,6 +67,8 @@ export default function Form() {
             type="email"
             name="email"
             placeholder="Email Address"
+            aria-label="Email Address"
+            autoComplete="email"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.email}
             onChange={handleChange}
@@ -70,6 +78,9 @@ export default function Form() {
             type="tel"
             name="phone"
             placeholder="Phone Number"
+            aria-label="Phone Number"
+            autoComplete="tel"
+            pattern="^[0-9\-+\s()]*$"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.phone}
             onChange={handleChange}
@@ -79,6 +90,9 @@ export default function Form() {
             type="text"
             name="zip"
             placeholder="ZIP Code"
+            aria-label="ZIP Code"
+            autoComplete="postal-code"
+            pattern="\d{5}"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.zip}
             onChange={handleChange}
@@ -86,6 +100,7 @@ export default function Form() {
           />
           <select
             name="service"
+            aria-label="Select a Service"
             className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
             value={form.service}
             onChange={handleChange}
@@ -105,7 +120,7 @@ export default function Form() {
             Submit Request
           </motion.button>
         </form>
-      </motion.div>
-    </section>
+      </div>
+    </motion.section>
   );
 }

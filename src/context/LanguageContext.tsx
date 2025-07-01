@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode
+} from 'react';
 
 type Language = 'en' | 'es';
 
@@ -12,10 +18,19 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('es');
+  const [language, setLanguage] = useState<Language>('en'); // inglés por defecto
+
+  useEffect(() => {
+    const storedLang = localStorage.getItem('lang');
+    if (storedLang === 'es' || storedLang === 'en') {
+      setLanguage(storedLang as Language);
+    }
+  }, []);
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === 'en' ? 'es' : 'en'));
+    const newLang = language === 'en' ? 'es' : 'en';
+    setLanguage(newLang);
+    localStorage.setItem('lang', newLang);
   };
 
   return (
