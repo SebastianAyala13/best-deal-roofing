@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Form() {
@@ -24,10 +24,8 @@ export default function Form() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // Actualiza el formulario
     setForm(prev => ({ ...prev, [name]: value }));
 
-    // Si cambia ownership y selecciona "no", mostrar alerta
     if (name === 'ownership') {
       if (value === 'no') {
         setIsNotEligible(true);
@@ -72,9 +70,7 @@ export default function Form() {
       {isNotEligible ? (
         <div className="w-full max-w-md bg-white/90 p-6 sm:p-8 rounded-2xl shadow-xl text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-4">
-            {language === 'es'
-              ? 'No puedes continuar'
-              : 'You cannot proceed'}
+            {language === 'es' ? 'No puedes continuar' : 'You cannot proceed'}
           </h2>
           <p className="text-slate-700">
             {language === 'es'
@@ -96,7 +92,7 @@ export default function Form() {
               : 'Fill in the form and our team will reach out to you shortly.'}
           </p>
 
-          {/* Campos de texto */}
+          {/* Inputs de texto */}
           <input
             type="text"
             name="fullName"
@@ -146,7 +142,7 @@ export default function Form() {
             <option value="repair">{language === 'es' ? 'Reparación' : 'Roof Repair'}</option>
           </select>
 
-          {/* Propiedad */}
+          {/* Propietario */}
           <select
             name="ownership"
             value={form.ownership}
