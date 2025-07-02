@@ -1,7 +1,6 @@
-'use client';
-
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
+import Link from 'next/link';
 
 export default function Hero() {
   const { language } = useLanguage();
@@ -50,14 +49,15 @@ export default function Hero() {
           <span className="text-yellow-400">{t.highlight}</span>
         </h1>
         <p className="text-lg sm:text-xl mb-8 text-gray-300">{t.subtitle}</p>
-        <motion.a
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          href="#form-section"
-          className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition"
-        >
-          {t.cta}
-        </motion.a>
+
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Link
+            href="/quote#quote-wizard"
+            className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition inline-block"
+          >
+            {t.cta}
+          </Link>
+        </motion.div>
       </motion.div>
     </motion.section>
   );
