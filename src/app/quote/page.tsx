@@ -147,8 +147,19 @@ export default function QuoteForm() {
 
   const handleSubmit = () => {
     console.log('Lead captured:', formData);
-    alert(language === 'es' ? '¡Gracias por tu solicitud!' : 'Thank you for your request!');
-
+  
+    // TODO: Integrate email or backend logic here.
+    // Example:
+    // fetch('/api/send', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(formData)
+    // })
+  
+    alert(language === 'es'
+      ? '¡Gracias por tu solicitud!'
+      : 'Thank you for your request!');
+  
     setFormData({
       fullName: '',
       email: '',
@@ -159,9 +170,10 @@ export default function QuoteForm() {
       roofType: '',
       urgency: ''
     });
-
+  
     setStep(0);
   };
+  
 
   const current = questions[step];
   const progress = Math.round(((step + 1) / questions.length) * 100);
