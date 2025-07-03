@@ -24,7 +24,7 @@ export default function VideoSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="text-3xl sm:text-4xl font-bold mb-10 drop-shadow-md"
         >
           {language === 'en' ? 'Look how we work' : 'Mira cómo trabajamos'}
@@ -35,7 +35,7 @@ export default function VideoSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="flex gap-6 overflow-x-auto snap-x snap-mandatory py-4 px-2"
         >
           {videos.map((src, idx) => (

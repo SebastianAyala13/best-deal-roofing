@@ -70,7 +70,7 @@ export default function Promotions() {
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="text-3xl sm:text-4xl font-bold text-yellow-600 mb-10"
         >
           {t.title}
@@ -80,7 +80,7 @@ export default function Promotions() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-800"
         >
           {t.cards.map((card, i) => (

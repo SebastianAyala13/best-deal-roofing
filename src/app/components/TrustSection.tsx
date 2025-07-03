@@ -83,7 +83,7 @@ export default function TrustSection() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
+      viewport={{ amount: 0.5 }}
     >
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">

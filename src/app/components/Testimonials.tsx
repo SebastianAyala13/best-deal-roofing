@@ -75,7 +75,7 @@ export default function Testimonials() {
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="text-3xl font-bold mb-10 text-black drop-shadow-md text-center"
         >
           {language === 'en' ? 'What our clients say' : 'Lo que dicen nuestros clientes'}
@@ -86,7 +86,7 @@ export default function Testimonials() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="flex md:hidden gap-6 overflow-x-auto snap-x snap-mandatory pb-4 px-1"
         >
           {testimonials.map((t, idx) => (
@@ -112,7 +112,7 @@ export default function Testimonials() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="hidden md:grid gap-8 md:grid-cols-3"
         >
           {testimonials.map((t, idx) => (

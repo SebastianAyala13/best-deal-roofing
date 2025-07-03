@@ -62,7 +62,7 @@ export default function ReviewSection() {
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ amount: 0.5 }}
           className="text-4xl font-bold text-white drop-shadow mb-12"
         >
           Real Reviews from Real Homeowners
@@ -76,7 +76,7 @@ export default function ReviewSection() {
               initial="hidden"
               whileInView="visible"
               variants={reviewVariants}
-              viewport={{ once: true }}
+              viewport={{ amount: 0.5 }}
               className="border border-white/20 bg-white/10 text-white p-6 rounded-2xl shadow-lg backdrop-blur-md"
             >
               <Image src={review.logo} alt={review.alt} width={80} height={20} />

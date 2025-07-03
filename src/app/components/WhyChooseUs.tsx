@@ -53,14 +53,20 @@ export default function WhyChooseUs() {
   const t = content[language];
 
   return (
-    <section id="benefits" className="bg-gradient-to-b from-white to-slate-100 py-20 px-6 text-center">
-      <div className="max-w-4xl mx-auto">
+    <section
+      id="benefits"
+      className="relative py-20 px-6 text-center text-white overflow-hidden"
+    >
+      {/* Overlay para mejorar contraste del texto */}
+      <div className="absolute inset-0 bg-black/40 z-0" />
+
+      <div className="relative z-10 max-w-4xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-3xl sm:text-4xl font-bold text-white mb-12"
+          viewport={{ amount: 0.5 }}
+          className="text-3xl sm:text-4xl font-bold mb-12"
         >
           {t.title}
         </motion.h2>
@@ -73,7 +79,7 @@ export default function WhyChooseUs() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2, duration: 0.5 }}
-              viewport={{ once: true }}
+              viewport={{ amount: 0.5 }}
             >
               <div className="mb-4">{feature.icon}</div>
               <h3 className="text-xl font-semibold text-slate-800 mb-2">{feature.title}</h3>
