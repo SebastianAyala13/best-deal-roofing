@@ -2,11 +2,47 @@
 
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
+import { useEffect, useRef } from 'react';
 
 export default function VideoSection() {
   const { language } = useLanguage();
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const videos = ['roofing.mp4', 'roofing2.mp4', 'roofing3.mp4', 'roofing4.mp4', 'roofing5.mp4'];
+
+  useEffect(() => {
+    // Intersection Observer para reproducir videos cuando entren en viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            video.play().catch(() => {
+              console.log('Video play on intersection failed');
+            });
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Reproducir cuando 30% del video sea visible
+      }
+    );
+
+    // Observar todos los videos
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        observer.observe(video);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const handleVideoRef = (el: HTMLVideoElement | null, index: number) => {
+    videoRefs.current[index] = el;
+  };
 
   return (
     <section id="video" className="relative py-20 px-6 text-center text-white overflow-hidden">
@@ -44,18 +80,35 @@ export default function VideoSection() {
               className="min-w-[300px] md:min-w-[450px] snap-center bg-white/10 p-2 rounded-xl shadow-xl border border-slate-600"
             >
               <video
+                ref={(el) => handleVideoRef(el, idx)}
                 className="w-full h-full object-cover rounded-lg"
                 src={`/${src}`}
                 autoPlay
                 muted
                 loop
                 playsInline
+                preload="metadata"
+                webkit-playsinline="true"
+                x-webkit-airplay="allow"
                 controls
                 aria-label={
                   language === 'en'
                     ? `Roofing video ${idx + 1}`
                     : `Video de techado ${idx + 1}`
                 }
+                onLoadedData={(e) => {
+                  const video = e.target as HTMLVideoElement;
+                  video.play().catch(() => {
+                    console.log(`Video ${idx + 1} autoplay prevented`);
+                  });
+                }}
+                onCanPlay={(e) => {
+                  const video = e.target as HTMLVideoElement;
+                  video.play().catch(() => {});
+                }}
+                onError={(e) => {
+                  console.log(`Error loading video ${idx + 1}:`, e);
+                }}
               >
                 {language === 'en'
                   ? 'Your browser does not support the video tag.'
