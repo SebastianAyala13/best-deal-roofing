@@ -35,20 +35,8 @@ export default function Hero() {
         loop
         playsInline
         preload="metadata"
-        webkit-playsinline="true"
-        x-webkit-airplay="allow"
         className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none"
         src="/roofing.mp4"
-        onLoadedData={(e) => {
-          const video = e.target as HTMLVideoElement;
-          video.play().catch(() => {
-            console.log('Hero video autoplay prevented, will try on user interaction');
-          });
-        }}
-        onCanPlay={(e) => {
-          const video = e.target as HTMLVideoElement;
-          video.play().catch(() => {});
-        }}
       />
       <div className="absolute inset-0 bg-slate-900/50 z-0" />
       <motion.div

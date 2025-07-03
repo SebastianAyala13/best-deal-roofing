@@ -15,6 +15,7 @@ import ReviewSection from './components/ReviewSection';
 import Testimonials from './components/Testimonials';
 import ProjectGallery from './components/ProjectGallery';
 import Footer from './components/Footer';
+import MobileVideoHandler from './components/MobileVideoHandler';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -111,6 +112,7 @@ export default function Home() {
 
   return (
     <>
+      <MobileVideoHandler />
       <Header />
       <Hero />
       <VideoSection />
