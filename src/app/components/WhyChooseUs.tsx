@@ -60,7 +60,7 @@ export default function WhyChooseUs() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-4xl font-bold text-slate-900 mb-12"
+          className="text-3xl sm:text-4xl font-bold text-white mb-12"
         >
           {t.title}
         </motion.h2>

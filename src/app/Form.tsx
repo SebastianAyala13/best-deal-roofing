@@ -59,7 +59,7 @@ export default function Form() {
       roofType: '',
       customRoofType: '',
       urgency: '',
-      customUrgency: '',
+      customUrgency: '',  
     });
 
     alert(language === 'es' ? '¡Gracias! Hemos recibido tu solicitud.' : 'Thanks! Your request has been submitted.');
@@ -69,7 +69,7 @@ export default function Form() {
     <div className="flex justify-center px-4">
       {isNotEligible ? (
         <div className="w-full max-w-md bg-white/90 p-6 sm:p-8 rounded-2xl shadow-xl text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12 drop-shadow-md"          >
             {language === 'es' ? 'No puedes continuar' : 'You cannot proceed'}
           </h2>
           <p className="text-slate-700">
@@ -83,7 +83,7 @@ export default function Form() {
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-white/90 p-6 sm:p-8 rounded-2xl shadow-xl backdrop-blur-md"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-black mb-12 drop-shadow-md"          >
             {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Roofing Quote'}
           </h2>
           <p className="text-sm text-slate-600 mb-6 text-center">
