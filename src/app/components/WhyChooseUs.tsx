@@ -53,7 +53,7 @@ export default function WhyChooseUs() {
   const t = content[language];
 
   return (
-    <section id="benefits" className="bg-pattern py-20 px-6 text-center">
+    <section id="benefits" className="bg-gradient-to-b from-white to-slate-100 py-20 px-6 text-center">
       <div className="max-w-4xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}

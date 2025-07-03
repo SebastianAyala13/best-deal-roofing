@@ -14,7 +14,7 @@ export default function VideoSection() {
       <div className="absolute inset-0 -z-10">
         <img
           src="/background-video-blur.jpg"
-          alt="Background"
+          alt=""
           className="w-full h-full object-cover opacity-20"
         />
       </div>

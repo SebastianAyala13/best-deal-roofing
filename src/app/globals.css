@@ -30,6 +30,6 @@ html {
 }
 /* Fondo visual para secciones claras */
 .bg-pattern {
-  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-image: radial-gradient(rgba(229, 231, 235, 0.2) 1px, transparent 1px);
   background-size: 20px 20px;
 }
