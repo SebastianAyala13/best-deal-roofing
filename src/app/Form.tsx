@@ -59,7 +59,7 @@ export default function Form() {
       roofType: '',
       customRoofType: '',
       urgency: '',
-      customUrgency: '',  
+      customUrgency: '',
     });
 
     alert(language === 'es' ? '¡Gracias! Hemos recibido tu solicitud.' : 'Thanks! Your request has been submitted.');
@@ -69,7 +69,7 @@ export default function Form() {
     <div className="flex justify-center px-4">
       {isNotEligible ? (
         <div className="w-full max-w-md bg-white/90 p-6 sm:p-8 rounded-2xl shadow-xl text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12 drop-shadow-md"          >
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12 drop-shadow-md">
             {language === 'es' ? 'No puedes continuar' : 'You cannot proceed'}
           </h2>
           <p className="text-slate-700">
@@ -83,7 +83,7 @@ export default function Form() {
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-white/90 p-6 sm:p-8 rounded-2xl shadow-xl backdrop-blur-md"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-black mb-12 drop-shadow-md"          >
+          <h2 className="text-3xl sm:text-4xl font-bold text-black mb-12 drop-shadow-md">
             {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Roofing Quote'}
           </h2>
           <p className="text-sm text-slate-600 mb-6 text-center">
@@ -92,14 +92,13 @@ export default function Form() {
               : 'Fill in the form and our team will reach out to you shortly.'}
           </p>
 
-          {/* Inputs de texto */}
           <input
             type="text"
             name="fullName"
             value={form.fullName}
             onChange={handleChange}
             placeholder={language === 'es' ? 'Nombre completo' : 'Full Name'}
-            className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+            className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
             required
           />
           <input
@@ -108,7 +107,7 @@ export default function Form() {
             value={form.email}
             onChange={handleChange}
             placeholder={language === 'es' ? 'Correo electrónico' : 'Email Address'}
-            className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+            className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
             required
           />
           <input
@@ -117,7 +116,7 @@ export default function Form() {
             value={form.phone}
             onChange={handleChange}
             placeholder={language === 'es' ? 'Número de teléfono' : 'Phone Number'}
-            className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+            className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
             required
           />
           <input
@@ -126,15 +125,14 @@ export default function Form() {
             value={form.zip}
             onChange={handleChange}
             placeholder={language === 'es' ? 'Código postal' : 'ZIP Code'}
-            className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+            className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
           />
 
-          {/* Servicio */}
           <select
             name="service"
             value={form.service}
             onChange={handleChange}
-            className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 text-slate-700 text-base"
+            className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black text-base"
             required
           >
             <option value="">{language === 'es' ? 'Selecciona un servicio' : 'Select a Service'}</option>
@@ -142,12 +140,11 @@ export default function Form() {
             <option value="repair">{language === 'es' ? 'Reparación' : 'Roof Repair'}</option>
           </select>
 
-          {/* Propietario */}
           <select
             name="ownership"
             value={form.ownership}
             onChange={handleChange}
-            className="w-full mb-2 px-4 py-3 rounded-lg border border-black-300 text-slate-700 text-base"
+            className="w-full mb-2 px-4 py-3 rounded-lg border border-black text-black text-base"
             required
           >
             <option value="">{language === 'es' ? '¿Eres el propietario?' : 'Are you the homeowner?'}</option>
@@ -155,12 +152,11 @@ export default function Form() {
             <option value="no">{language === 'es' ? 'No, soy inquilino' : 'No, I’m renting'}</option>
           </select>
 
-          {/* Tipo de techo */}
           <select
             name="roofType"
             value={form.roofType}
             onChange={handleChange}
-            className="w-full mb-2 px-4 py-3 rounded-lg border border-black-300 text-slate-700 text-base"
+            className="w-full mb-2 px-4 py-3 rounded-lg border border-black text-black text-base"
           >
             <option value="">{language === 'es' ? 'Tipo de techo' : 'Type of Roof'}</option>
             <option value="asphalt">{language === 'es' ? 'Asfáltico' : 'Asphalt Shingles'}</option>
@@ -176,17 +172,16 @@ export default function Form() {
               value={form.customRoofType}
               onChange={handleChange}
               placeholder={language === 'es' ? 'Especifica el tipo de techo' : 'Specify roof type'}
-              className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+              className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
               required
             />
           )}
 
-          {/* Urgencia */}
           <select
             name="urgency"
             value={form.urgency}
             onChange={handleChange}
-            className="w-full mb-2 px-4 py-3 rounded-lg border border-black-300 text-slate-700 text-base"
+            className="w-full mb-2 px-4 py-3 rounded-lg border border-black text-black text-base"
           >
             <option value="">{language === 'es' ? '¿Cuándo necesitas el servicio?' : 'How soon do you need service?'}</option>
             <option value="asap">{language === 'es' ? 'Lo antes posible' : 'As soon as possible'}</option>
@@ -201,7 +196,7 @@ export default function Form() {
               value={form.customUrgency}
               onChange={handleChange}
               placeholder={language === 'es' ? 'Especifica cuándo' : 'Specify when'}
-              className="w-full mb-4 px-4 py-3 rounded-lg border border-black-300 focus:outline-yellow-500 text-base"
+              className="w-full mb-4 px-4 py-3 rounded-lg border border-black text-black placeholder:text-slate-500 focus:outline-yellow-500 text-base"
               required
             />
           )}
