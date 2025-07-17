@@ -3,6 +3,7 @@
 import { useState, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface FormData {
@@ -169,9 +170,9 @@ export default function QuoteForm() {
           <p className="text-slate-700 mb-6">
             {language === 'es' ? 'Tu información fue enviada correctamente. Pronto recibirás una respuesta.' : 'Your information has been successfully submitted. We will get back to you soon.'}
           </p>
-          <a href="/" className="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition">
+          <Link href="/" className="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition">
             {language === 'es' ? 'Volver al inicio' : 'Back to Home'}
-          </a>
+          </Link>
         </motion.div>
       ) : (
         <>
