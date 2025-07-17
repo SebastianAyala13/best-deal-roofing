@@ -12,48 +12,48 @@ export default function Testimonials() {
       name: 'Carlos M.',
       image: '/experience1.jpg',
       text: {
-        en: 'The service was fast and professional. Highly recommended!',
-        es: 'El servicio fue rápido y profesional. ¡Muy recomendado!',
+        en: 'Just got our roof done this week and I’m very happy with the work. Ami was very professional, showed me pictures of the damage and explained all the details. The quote was the best price and they finished everything so fast. Highly recommended! 👍',
+        es: 'Esta semana terminaron nuestro techo y quedamos muy satisfechos. Ami fue muy profesional, mostró fotos del daño y explicó cada detalle. El precio fue el mejor y terminaron rapidísimo. ¡Muy recomendados! 👍',
       },
     },
     {
       name: 'Emily R.',
       image: '/experience2.jpg',
       text: {
-        en: 'They inspected and repaired my roof in no time.',
-        es: 'Inspeccionaron y repararon mi techo en muy poco tiempo.',
+        en: 'Ami was the only one who took time to inspect my leaks carefully. He explained the layers of the roof, and they even took care of the city permit. I felt in good hands and the results were amazing.',
+        es: 'Ami fue el único que se tomó el tiempo para inspeccionar con detalle las filtraciones. Me explicó las capas del techo y ellos mismos gestionaron el permiso con la ciudad. Me sentí en buenas manos y el resultado fue increíble.',
       },
     },
     {
       name: 'Luis A.',
       image: '/experience3.jpg',
       text: {
-        en: 'Great customer service and a lifetime warranty.',
-        es: 'Excelente servicio al cliente y garantía de por vida.',
+        en: 'Their crew removed my old roof and installed the new shingles in just two days. The cleanup was spotless and the roof looks fantastic. Plus, I got a lifetime warranty.',
+        es: 'Su equipo quitó mi techo viejo y colocó las nuevas tejas en solo dos días. Dejaron todo limpio y el techo quedó espectacular. Además, me dieron garantía de por vida.',
       },
     },
     {
       name: 'Sarah T.',
       image: '/experience4.jpg',
       text: {
-        en: 'Super friendly team and my roof looks brand new!',
-        es: '¡Equipo muy amable y mi techo parece nuevo!',
+        en: 'The team was super friendly and efficient. From the moment I called until the last shingle was placed, I felt informed and taken care of. My roof looks brand new!',
+        es: 'El equipo fue súper amable y eficiente. Desde que llamé hasta que pusieron la última teja, me mantuvieron informada y me sentí atendida. ¡Mi techo parece nuevo!',
       },
     },
     {
       name: 'Mark P.',
       image: '/experience5.jpg',
       text: {
-        en: 'They helped me with insurance and the job was quick.',
-        es: 'Me ayudaron con el seguro y el trabajo fue rápido.',
+        en: 'I was overwhelmed by insurance paperwork but Ami helped me every step of the way. The process was fast and painless. Don’t hesitate to call them!',
+        es: 'Estaba abrumado con los papeles del seguro pero Ami me ayudó en cada paso. El proceso fue rápido y sin complicaciones. ¡No duden en llamarlos!',
       },
     },
     {
       name: 'Julia G.',
       image: '/experience6.jpg',
       text: {
-        en: 'The whole process was smooth. I felt informed and secure.',
-        es: 'Todo el proceso fue fluido. Me sentí informado y seguro.',
+        en: 'From the inspection to the final installation, everything was clear and smooth. They respected the timeline and were super communicative. Thank you for the great service!',
+        es: 'Desde la inspección hasta la instalación final, todo fue claro y sin contratiempos. Respetaron los tiempos y siempre estuvieron en contacto. ¡Gracias por el excelente servicio!',
       },
     },
   ];
