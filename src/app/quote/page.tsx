@@ -4,6 +4,7 @@ import { useState, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface FormData {
@@ -28,9 +29,9 @@ interface Question {
 
 export default function QuoteForm() {
   const { language } = useLanguage();
+  const router = useRouter();
 
   const [step, setStep] = useState<number>(0);
-  const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     ownership: '',
     service: '',
@@ -144,7 +145,17 @@ export default function QuoteForm() {
     if (step < questions.length - 1) {
       setStep(prev => prev + 1);
     } else {
-      setSubmitted(true);
+      // GTM Event Tracking
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'form_submit', {
+          event_category: 'Lead',
+          event_label: 'Quote Form',
+          value: 1
+        });
+      }
+      
+      // Redirect to thank you page
+      router.push('/thank-you');
     }
   };
 
@@ -157,25 +168,7 @@ export default function QuoteForm() {
 
   return (
     <section id="quote-wizard" className="max-w-4xl mx-auto px-4 py-10">
-      {submitted ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white p-8 rounded-3xl shadow-xl text-center"
-        >
-          <h2 className="text-2xl font-bold text-green-600 mb-4">
-            {language === 'es' ? '¡Gracias por tu solicitud!' : 'Thank you for your request!'}
-          </h2>
-          <p className="text-slate-700 mb-6">
-            {language === 'es' ? 'Tu información fue enviada correctamente. Pronto recibirás una respuesta.' : 'Your information has been successfully submitted. We will get back to you soon.'}
-          </p>
-          <Link href="/" className="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition">
-            {language === 'es' ? 'Volver al inicio' : 'Back to Home'}
-          </Link>
-        </motion.div>
-      ) : (
-        <>
+      <>
           <div className="mb-4 text-sm font-medium text-slate-700">{progress}%</div>
           <div className="w-full h-2 bg-gray-200 rounded-full mb-8">
             <div className="h-full bg-yellow-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
@@ -243,8 +236,7 @@ export default function QuoteForm() {
               </div>
             </div>
           </motion.div>
-        </>
-      )}
+      </>
     </section>
   );
 }

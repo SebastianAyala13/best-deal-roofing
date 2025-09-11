@@ -61,6 +61,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WS6NVJBF');`,
+          }}
+        />
+        {/* End Google Tag Manager */}
+        
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#FBBF24" />
         <meta name="author" content="Best Deal Roofing Team" />
@@ -70,6 +82,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="relative bg-white text-gray-900">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-WS6NVJBF"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+        
         {/* 🔁 Background Video Global */}
         <video
           autoPlay

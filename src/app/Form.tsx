@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Form() {
   const { language } = useLanguage();
+  const router = useRouter();
 
   const [form, setForm] = useState({
     fullName: '',
@@ -49,20 +51,17 @@ export default function Form() {
 
     console.log('Lead captured:', submittedForm);
 
-    setForm({
-      fullName: '',
-      email: '',
-      phone: '',
-      zip: '',
-      service: '',
-      ownership: '',
-      roofType: '',
-      customRoofType: '',
-      urgency: '',
-      customUrgency: '',
-    });
+    // GTM Event Tracking
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'form_submit', {
+        event_category: 'Lead',
+        event_label: 'Contact Form',
+        value: 1
+      });
+    }
 
-    alert(language === 'es' ? '¡Gracias! Hemos recibido tu solicitud.' : 'Thanks! Your request has been submitted.');
+    // Redirect to thank you page
+    router.push('/thank-you');
   };
 
   return (
