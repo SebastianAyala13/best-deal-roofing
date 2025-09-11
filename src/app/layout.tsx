@@ -74,9 +74,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager */}
         
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#FBBF24" />
-        <meta name="author" content="Best Deal Roofing Team" />
-        <link rel="canonical" href="https://www.bestdealroofing.xyz/" />
+        <meta name="theme-color" content="#14b8a6" />
+        <meta name="author" content="TOPTIER BATH PROS Team" />
+        <link rel="canonical" href="https://bathroom.homedesignandco.com/" />
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
