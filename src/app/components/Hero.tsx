@@ -53,7 +53,7 @@ export default function Hero() {
 
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Link
-            href="/quote#quote-wizard"
+            href="#lead-form"
             className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-8 py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition inline-block"
           >
             {t.cta}

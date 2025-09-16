@@ -30,7 +30,7 @@ export default function Header() {
         {/* Menú + idioma */}
           <div className="flex items-center space-x-6">
             <nav className="hidden sm:flex space-x-6 text-sm text-slate-700 font-medium">
-              <a href="#form-section" className="hover:text-yellow-500 transition">
+              <a href="#lead-form" className="hover:text-yellow-500 transition">
                 {language === 'en' ? 'Free Quote' : 'Cotización'}
               </a>
               <a href="#benefits" className="hover:text-yellow-500 transition">

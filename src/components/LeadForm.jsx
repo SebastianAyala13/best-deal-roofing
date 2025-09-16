@@ -1,0 +1,364 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+
+export default function LeadForm() {
+  const { language } = useLanguage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [tfToken, setTfToken] = useState('');
+  const tfHiddenRef = useRef(null);
+
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email_address: '',
+    phone_home: '',
+    address: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    repair_or_replace: '',
+    tcpa_consent: false,
+  });
+
+  // TrustedForm Integration
+  useEffect(() => {
+    if (!tfHiddenRef.current) return;
+    
+    // Ya cargamos el script global en layout.tsx con field=trusted_form_cert_id
+    const applyFromGlobal = () => {
+      try {
+        const val = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
+        if (val) {
+          if (tfHiddenRef.current) tfHiddenRef.current.value = val;
+          setTfToken(val);
+        }
+      } catch {}
+    };
+
+    applyFromGlobal();
+    
+    const obs = new MutationObserver(() => {
+      if (tfHiddenRef.current?.value) setTfToken(tfHiddenRef.current.value);
+    });
+    
+    obs.observe(tfHiddenRef.current, { attributes: true, attributeFilter: ['value'] });
+    const id = setInterval(applyFromGlobal, 300);
+    
+    return () => { 
+      obs.disconnect(); 
+      clearInterval(id); 
+    };
+  }, []);
+
+  async function waitForTrustedFormToken(maxWaitMs = 2000) {
+    // Espera hasta 2s con polling cada 150ms para capturar token
+    const start = Date.now();
+    const poll = async () => {
+      const hiddenVal = tfHiddenRef.current?.value || '';
+      let fromApi = '';
+      try { 
+        fromApi = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
+      } catch {}
+      
+      const val = hiddenVal || fromApi;
+      if (val) {
+        if (!hiddenVal && tfHiddenRef.current) tfHiddenRef.current.value = val;
+        setTfToken(val);
+        return val;
+      }
+      
+      if (Date.now() - start >= maxWaitMs) return '';
+      await new Promise(r => setTimeout(r, 150));
+      return poll();
+    };
+    return poll();
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // Esperar por el token de TrustedForm
+      const trustedFormToken = await waitForTrustedFormToken();
+      
+      // TCPA Text completo
+      const tcpaText = "By clicking Submit, You agree to give express consent to receive marketing communications regarding HomeImprovement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registery. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the Privacy Policy and Terms & Conditions. See Home Services Partners.";
+
+      // Payload completo para Zapier
+      const payload = {
+        // Datos del formulario
+        ...formData,
+        
+        // Metadatos y tracking
+        trusted_form_cert_id: trustedFormToken || 'NOT_PROVIDED',
+        landing_page: window.location.href,
+        tcpaText: tcpaText,
+        
+        // Constantes de campaña (se completarán en el API)
+        lp_response: 'JSON',
+      };
+
+      // GTM Event Tracking
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'form_submit', {
+          event_category: 'Lead',
+          event_label: 'Lead Form',
+          value: 1
+        });
+      }
+
+      const response = await fetch('/api/zapier', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        // Redirect to thank you page
+        window.location.href = '/thank-you';
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div id="lead-form" className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-md mx-auto">
+      {/* TrustedForm Hidden Field */}
+      <input
+        ref={tfHiddenRef}
+        type="hidden"
+        name="trusted_form_cert_id"
+        id="trusted_form_cert_id"
+      />
+
+      <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-6 text-center">
+        {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
+      </h2>
+      
+      <p className="text-sm text-gray-600 mb-6 text-center">
+        {language === 'es' 
+          ? 'Completa el formulario y nuestro equipo se pondrá en contacto contigo.'
+          : 'Fill out the form and our team will contact you shortly.'
+        }
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* First Name */}
+        <div>
+          <input
+            type="text"
+            name="first_name"
+            value={formData.first_name}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Nombre' : 'First Name'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* Last Name */}
+        <div>
+          <input
+            type="text"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Apellido' : 'Last Name'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <input
+            type="email"
+            name="email_address"
+            value={formData.email_address}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Correo Electrónico' : 'Email Address'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* Phone */}
+        <div>
+          <input
+            type="tel"
+            name="phone_home"
+            value={formData.phone_home}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Número de Teléfono' : 'Phone Number'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* Address */}
+        <div>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Dirección Completa' : 'Full Address'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* City */}
+        <div>
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Ciudad' : 'City'}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* State & Zip */}
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            type="text"
+            name="state"
+            value={formData.state}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Estado' : 'State'}
+            className="px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+          <input
+            type="text"
+            name="zip_code"
+            value={formData.zip_code}
+            onChange={handleInputChange}
+            placeholder={language === 'es' ? 'Código Postal' : 'ZIP Code'}
+            className="px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        {/* Repair or Replace */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-2">
+            {language === 'es' ? '¿Qué necesitas?' : 'What do you need?'}
+          </p>
+          <div className="flex gap-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="repair_or_replace"
+                value="repair"
+                checked={formData.repair_or_replace === 'repair'}
+                onChange={handleInputChange}
+                className="mr-2 text-teal-500 focus:ring-teal-500"
+                required
+              />
+              <span className="text-sm text-gray-700">
+                {language === 'es' ? 'Reparación' : 'Repair'}
+              </span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="repair_or_replace"
+                value="replace"
+                checked={formData.repair_or_replace === 'replace'}
+                onChange={handleInputChange}
+                className="mr-2 text-teal-500 focus:ring-teal-500"
+                required
+              />
+              <span className="text-sm text-gray-700">
+                {language === 'es' ? 'Reemplazo' : 'Replace'}
+              </span>
+            </label>
+          </div>
+        </div>
+
+        {/* TCPA Consent */}
+        <div className="space-y-3">
+          <label className="flex items-start space-x-3">
+            <input
+              type="checkbox"
+              name="tcpa_consent"
+              checked={formData.tcpa_consent}
+              onChange={handleInputChange}
+              className="mt-1 text-teal-500 focus:ring-teal-500 rounded"
+              required
+            />
+            <p id="tcpa_text" className="text-xs leading-relaxed">
+              By clicking Submit, You agree to give express consent to receive marketing communications regarding HomeImprovement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registery. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
+              <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
+              <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>. See{' '}
+              <a className="underline ml-1" href="https://offers.homequotepos.com/bathroom/v4" target="_blank" rel="noreferrer">Home Services Partners</a>.
+            </p>
+          </label>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting || !formData.tcpa_consent}
+          className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+        >
+          {isSubmitting ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {language === 'es' ? 'Enviando...' : 'Submitting...'}
+            </>
+          ) : (
+            language === 'es' ? 'Obtener Cotización Gratuita' : 'Get Free Quote'
+          )}
+        </button>
+
+        {/* Status Messages */}
+        {submitStatus === 'error' && (
+          <div className="text-red-600 text-sm text-center">
+            {language === 'es' 
+              ? 'Error al enviar el formulario. Por favor intenta de nuevo.' 
+              : 'Error submitting form. Please try again.'
+            }
+          </div>
+        )}
+      </form>
+
+      {/* TrustedForm Debug Info (only in development) */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
+          <p>TrustedForm Token: {tfToken ? 'Captured' : 'Waiting...'}</p>
+          <p className="truncate">URL: {tfToken}</p>
+        </div>
+      )}
+    </div>
+  );
+}

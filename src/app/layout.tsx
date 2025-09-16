@@ -73,6 +73,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
         {/* End Google Tag Manager */}
         
+        {/* TrustedForm Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function() {
+              var tf = document.createElement('script');
+              tf.type = 'text/javascript';
+              tf.async = true;
+              tf.src = '//api.trustedform.com/trustedform.js?field=trusted_form_cert_id&use_tagged_consent=true&l=' + 
+                       new Date().getTime() + Math.random();
+              var s = document.getElementsByTagName('script')[0];
+              s.parentNode.insertBefore(tf, s);
+            })();`,
+          }}
+        />
+        {/* End TrustedForm Script */}
+        
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#14b8a6" />
         <meta name="author" content="TOPTIER BATH PROS Team" />

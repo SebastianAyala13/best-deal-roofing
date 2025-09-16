@@ -16,6 +16,8 @@ import Testimonials from './components/Testimonials';
 import ProjectGallery from './components/ProjectGallery';
 import Footer from './components/Footer';
 import MobileVideoHandler from './components/MobileVideoHandler';
+import LeadForm from '@/components/LeadForm';
+import StickyLeadForm from '@/components/StickyLeadForm';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -132,6 +134,38 @@ export default function Home() {
         <Testimonials />
       </section>
 
+      {/* Lead Form Section */}
+      <section id="lead-form-section" className="py-20 px-6 bg-gradient-to-b from-teal-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
+            </h2>
+            <p className="text-lg text-slate-600">
+              {language === 'es' 
+                ? 'Transforma tu baño con nuestros expertos. Respuesta en 24 horas.'
+                : 'Transform your bathroom with our experts. Response within 24 hours.'
+              }
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <LeadForm />
+          </motion.div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section id="faq" className="relative py-20 px-4 text-white bg-white/10 backdrop-blur-md">
         <div className="absolute inset-0 -z-10">
@@ -175,6 +209,9 @@ export default function Home() {
       <p className="sr-only">
         Best Deal Roofing is a trusted and licensed roofing contractor offering full roof replacements, emergency roof repairs, and free estimates across the United States including Texas, Florida, and California.
       </p>
+
+      {/* Sticky Lead Form */}
+      <StickyLeadForm />
     </>
   );
 }
