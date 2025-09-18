@@ -70,22 +70,22 @@ export default function StickyLeadForm() {
           </button>
 
           {/* Form content */}
-          <div className="relative p-4">
-            <div className="mb-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-green-600">Online Now</span>
+          <div className="relative p-2">
+            <div className="mb-2">
+              <div className="flex items-center space-x-2 mb-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs font-medium text-green-600">Online Now</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-800">
+              <h3 className="text-sm font-bold text-slate-800">
                 Get Your Free Quote
               </h3>
               <p className="text-xs text-gray-600">
-                Limited time offer - Response in 24hrs
+                Response in 24hrs
               </p>
             </div>
             
             {/* Render the same LeadForm component */}
-            <div className="scale-95 origin-top">
+            <div className="scale-90 origin-top">
               <LeadForm />
             </div>
           </div>

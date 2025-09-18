@@ -20,7 +20,7 @@ export default function LeadForm() {
     state: '',
     zip_code: '',
     repair_or_replace: '',
-    tcpa_consent: false,
+    consent_language: false,
   });
 
   // TrustedForm Integration
@@ -95,7 +95,7 @@ export default function LeadForm() {
       const trustedFormToken = await waitForTrustedFormToken();
       
       // TCPA Text completo
-      const tcpaText = "By clicking Submit, You agree to give express consent to receive marketing communications regarding HomeImprovement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registery. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the Privacy Policy and Terms & Conditions. See Home Services Partners.";
+      const tcpaText = "By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the Privacy Policy and Terms & Conditions.";
 
       // Payload completo para Zapier
       const payload = {
@@ -144,7 +144,7 @@ export default function LeadForm() {
   };
 
   return (
-    <div id="lead-form" className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-md mx-auto">
+    <div id="lead-form" className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl max-w-md mx-auto">
       {/* TrustedForm Hidden Field */}
       <input
         ref={tfHiddenRef}
@@ -153,18 +153,18 @@ export default function LeadForm() {
         id="trusted_form_cert_id"
       />
 
-      <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-6 text-center">
+      <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 text-center">
         {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
       </h2>
       
-      <p className="text-sm text-gray-600 mb-6 text-center">
+      <p className="text-xs text-gray-600 mb-4 text-center">
         {language === 'es' 
           ? 'Completa el formulario y nuestro equipo se pondrá en contacto contigo.'
           : 'Fill out the form and our team will contact you shortly.'
         }
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2">
         {/* First Name */}
         <div>
           <input
@@ -173,7 +173,7 @@ export default function LeadForm() {
             value={formData.first_name}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Nombre' : 'First Name'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -186,7 +186,7 @@ export default function LeadForm() {
             value={formData.last_name}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Apellido' : 'Last Name'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -199,7 +199,7 @@ export default function LeadForm() {
             value={formData.email_address}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Correo Electrónico' : 'Email Address'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -212,7 +212,7 @@ export default function LeadForm() {
             value={formData.phone_home}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Número de Teléfono' : 'Phone Number'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -225,7 +225,7 @@ export default function LeadForm() {
             value={formData.address}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Dirección Completa' : 'Full Address'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -238,7 +238,7 @@ export default function LeadForm() {
             value={formData.city}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Ciudad' : 'City'}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -267,10 +267,10 @@ export default function LeadForm() {
 
         {/* Repair or Replace */}
         <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">
+          <p className="text-xs font-medium text-gray-700 mb-1">
             {language === 'es' ? '¿Qué necesitas?' : 'What do you need?'}
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <label className="flex items-center">
               <input
                 type="radio"
@@ -278,10 +278,10 @@ export default function LeadForm() {
                 value="repair"
                 checked={formData.repair_or_replace === 'repair'}
                 onChange={handleInputChange}
-                className="mr-2 text-teal-500 focus:ring-teal-500"
+                className="mr-1 text-teal-500 focus:ring-teal-500"
                 required
               />
-              <span className="text-sm text-gray-700">
+              <span className="text-xs text-gray-700">
                 {language === 'es' ? 'Reparación' : 'Repair'}
               </span>
             </label>
@@ -292,41 +292,31 @@ export default function LeadForm() {
                 value="replace"
                 checked={formData.repair_or_replace === 'replace'}
                 onChange={handleInputChange}
-                className="mr-2 text-teal-500 focus:ring-teal-500"
+                className="mr-1 text-teal-500 focus:ring-teal-500"
                 required
               />
-              <span className="text-sm text-gray-700">
+              <span className="text-xs text-gray-700">
                 {language === 'es' ? 'Reemplazo' : 'Replace'}
               </span>
             </label>
           </div>
         </div>
 
-        {/* TCPA Consent */}
-        <div className="space-y-3">
-          <label className="flex items-start space-x-3">
-            <input
-              type="checkbox"
-              name="tcpa_consent"
-              checked={formData.tcpa_consent}
-              onChange={handleInputChange}
-              className="mt-1 text-teal-500 focus:ring-teal-500 rounded"
-              required
-            />
-            <p id="tcpa_text" className="text-xs leading-relaxed">
-              By clicking Submit, You agree to give express consent to receive marketing communications regarding HomeImprovement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registery. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
-              <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
-              <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>. See{' '}
-              <a className="underline ml-1" href="https://offers.homequotepos.com/bathroom/v4" target="_blank" rel="noreferrer">Home Services Partners</a>.
-            </p>
-          </label>
+        {/* TCPA Consent Text */}
+        <div className="space-y-1">
+          <p id="tcpa_text" className="text-xs leading-tight text-gray-600">
+            By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from{' '}
+            <a className="underline" href="/partners" target="_blank" rel="noreferrer">Home Services Partners</a> at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
+            <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
+            <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>.
+          </p>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting || !formData.tcpa_consent}
-          className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+          disabled={isSubmitting}
+          className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center text-sm"
         >
           {isSubmitting ? (
             <>
@@ -334,10 +324,10 @@ export default function LeadForm() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              {language === 'es' ? 'Enviando...' : 'Submitting...'}
+              Submitting...
             </>
           ) : (
-            language === 'es' ? 'Obtener Cotización Gratuita' : 'Get Free Quote'
+            'Submit'
           )}
         </button>
 

@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       // Servicio y consentimiento
       repair_or_replace: body.repair_or_replace ?? '',
       tcpaText: body.tcpaText ?? '',
-      tcpa_consent: !!body.tcpa_consent,
+      consent_language: !!body.consent_language,
     };
 
     // Log para debugging (remover en producción)
