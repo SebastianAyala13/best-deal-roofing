@@ -51,15 +51,6 @@ export default function Form() {
 
     console.log('Lead captured:', submittedForm);
 
-    // GTM Event Tracking
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'form_submit', {
-        event_category: 'Lead',
-        event_label: 'Contact Form',
-        value: 1
-      });
-    }
-
     // Redirect to thank you page
     router.push('/thank-you');
   };

@@ -3,12 +3,31 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
+// Declaraciones globales para TrustedForm
+declare global {
+  interface Window {
+    TrustedForm?: {
+      getCertUrl?: () => string;
+    };
+  }
+}
+
 export default function LeadForm() {
   const { language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
   const [tfToken, setTfToken] = useState('');
-  const tfHiddenRef = useRef(null);
+  const tfHiddenRef = useRef<HTMLInputElement>(null);
+  const hasSubmitted = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Log para verificar cuántas instancias se montan
+  useEffect(() => {
+    console.log('🔧 LeadForm component mounted - timestamp:', new Date().toISOString());
+    return () => {
+      console.log('🔧 LeadForm component unmounted - timestamp:', new Date().toISOString());
+    };
+  }, []);
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -77,7 +96,7 @@ export default function LeadForm() {
     return poll();
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -85,8 +104,17 @@ export default function LeadForm() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Prevenir envíos duplicados
+    if (hasSubmitted.current || isSubmitting) {
+      console.log('🚫 Form submission blocked - already submitted or submitting');
+      return;
+    }
+    
+    console.log('🚀 Form submission started - hasSubmitted:', hasSubmitted.current, 'isSubmitting:', isSubmitting);
+    hasSubmitted.current = true;
     setIsSubmitting(true);
     setSubmitStatus(null);
 
@@ -111,15 +139,6 @@ export default function LeadForm() {
         lp_response: 'JSON',
       };
 
-      // GTM Event Tracking
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'form_submit', {
-          event_category: 'Lead',
-          event_label: 'Lead Form',
-          value: 1
-        });
-      }
-
       const response = await fetch('/api/zapier', {
         method: 'POST',
         headers: {
@@ -129,6 +148,33 @@ export default function LeadForm() {
       });
 
       if (response.ok) {
+        console.log('✅ Form submitted successfully');
+        
+        // Disparar Custom Event para GTM (solo una vez)
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          const eventData = {
+            event: 'lead_submit',
+            form_id: 'lead_form',
+            form_type: 'roofing_quote',
+            lead_data: {
+              first_name: formData.first_name,
+              last_name: formData.last_name,
+              email: formData.email_address,
+              phone: formData.phone_home,
+              service: formData.repair_or_replace,
+              zip_code: formData.zip_code,
+              address: formData.address,
+              city: formData.city,
+              state: formData.state
+            }
+          };
+          
+          window.dataLayer.push(eventData);
+          console.log('✅ Custom GTM event pushed: lead_submit');
+          console.log('📊 Event data:', eventData);
+          console.log('📈 Total dataLayer events:', window.dataLayer.length);
+        }
+        
         setSubmitStatus('success');
         // Redirect to thank you page
         window.location.href = '/thank-you';
@@ -138,6 +184,7 @@ export default function LeadForm() {
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmitStatus('error');
+      hasSubmitted.current = false; // Reset para permitir reintento
     } finally {
       setIsSubmitting(false);
     }
@@ -164,7 +211,7 @@ export default function LeadForm() {
         }
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-2">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-2">
         {/* First Name */}
         <div>
           <input
