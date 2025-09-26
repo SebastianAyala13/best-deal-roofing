@@ -211,7 +211,7 @@ export default function LeadForm() {
         }
       </p>
 
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-2">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-1.5" data-tf-element-role="offer">
         {/* First Name */}
         <div>
           <input
@@ -220,7 +220,7 @@ export default function LeadForm() {
             value={formData.first_name}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Nombre' : 'First Name'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -233,7 +233,7 @@ export default function LeadForm() {
             value={formData.last_name}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Apellido' : 'Last Name'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -246,7 +246,7 @@ export default function LeadForm() {
             value={formData.email_address}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Correo Electrónico' : 'Email Address'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -259,7 +259,7 @@ export default function LeadForm() {
             value={formData.phone_home}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Número de Teléfono' : 'Phone Number'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -272,7 +272,7 @@ export default function LeadForm() {
             value={formData.address}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Dirección Completa' : 'Full Address'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -285,7 +285,7 @@ export default function LeadForm() {
             value={formData.city}
             onChange={handleInputChange}
             placeholder={language === 'es' ? 'Ciudad' : 'City'}
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
             required
           />
         </div>
@@ -351,32 +351,23 @@ export default function LeadForm() {
 
         {/* TCPA Consent Text */}
         <div className="space-y-1">
-          <p id="tcpa_text" className="text-xs leading-tight text-gray-600">
+          <label data-tf-element-role="consent-language" className="text-[10px] leading-tight text-gray-600">
             By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from{' '}
             <a className="underline" href="/partners" target="_blank" rel="noreferrer">Home Services Partners</a> at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
             <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
             <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>.
-          </p>
+          </label>
         </div>
 
         {/* Submit Button */}
-        <button
+        <input
           type="submit"
+          name="submit"
+          data-tf-element-role="submit"
           disabled={isSubmitting}
-          className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center text-sm"
-        >
-          {isSubmitting ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Submitting...
-            </>
-          ) : (
-            'Submit'
-          )}
-        </button>
+          className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center text-sm cursor-pointer"
+          value={isSubmitting ? 'Submitting...' : 'Submit'}
+        />
 
         {/* Status Messages */}
         {submitStatus === 'error' && (

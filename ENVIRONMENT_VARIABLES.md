@@ -7,7 +7,7 @@ Para que el sistema de formulario de leads funcione correctamente, necesitas con
 ### Variables de Zapier Integration
 
 ```
-ZAPIER_HOOK_URL=https://hooks.zapier.com/hooks/catch/22208931/udvjyvh/
+ZAPIER_HOOK_URL=https://hooks.zapier.com/hooks/catch/22208931/udvj24o/
 ```
 
 ### Variables de Campaña de Leads

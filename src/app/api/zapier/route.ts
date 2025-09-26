@@ -40,14 +40,15 @@ export async function POST(request: NextRequest) {
       consent_language: !!body.consent_language,
     };
 
+    // Enviar a Zapier
+    const zapierUrl = process.env.ZAPIER_HOOK_URL;
+    
     // Log para debugging (remover en producción)
-    console.log('Sending to Zapier:', {
+    console.log('🚀 Sending to Zapier:', {
       ...payload,
       trusted_form_cert_id: payload.trusted_form_cert_id.length > 50 ? 'TOKEN_PROVIDED' : payload.trusted_form_cert_id
     });
-
-    // Enviar a Zapier
-    const zapierUrl = process.env.ZAPIER_HOOK_URL;
+    console.log('📡 Zapier URL:', zapierUrl);
     
     if (!zapierUrl) {
       throw new Error('ZAPIER_HOOK_URL not configured');
@@ -61,11 +62,17 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(payload),
     });
 
+    console.log('📊 Zapier Response Status:', zapierResponse.status);
+    console.log('📊 Zapier Response OK:', zapierResponse.ok);
+
     if (!zapierResponse.ok) {
-      throw new Error(`Zapier responded with status: ${zapierResponse.status}`);
+      const errorText = await zapierResponse.text();
+      console.error('❌ Zapier Error Response:', errorText);
+      throw new Error(`Zapier responded with status: ${zapierResponse.status} - ${errorText}`);
     }
 
     const zapierResult = await zapierResponse.json();
+    console.log('✅ Zapier Success Response:', zapierResult);
 
     return NextResponse.json({
       success: true,
