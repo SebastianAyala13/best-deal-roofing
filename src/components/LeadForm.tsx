@@ -199,7 +199,13 @@ export default function LeadForm() {
         // Redirect to thank you page
         window.location.href = '/thank-you';
       } else {
-        throw new Error('Submission failed');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ API Error Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        });
+        throw new Error(`Submission failed: ${response.status} - ${errorData.message || response.statusText}`);
       }
     } catch (error) {
       console.error('Form submission error:', error);

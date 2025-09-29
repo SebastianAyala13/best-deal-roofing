@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       
       // Servicio y consentimiento
       repair_or_replace: body.repair_or_replace ?? '',
+      ownership: body.ownership ?? '',
       tcpaText: body.tcpaText ?? '',
       consent_language: !!body.consent_language,
     };
@@ -48,9 +49,10 @@ export async function POST(request: NextRequest) {
       ...payload,
       trusted_form_cert_id: payload.trusted_form_cert_id.length > 50 ? 'TOKEN_PROVIDED' : payload.trusted_form_cert_id
     });
-    console.log('📡 Zapier URL:', zapierUrl);
+    console.log('📡 Zapier URL:', zapierUrl ? 'CONFIGURED' : 'NOT_CONFIGURED');
     
     if (!zapierUrl) {
+      console.error('❌ ZAPIER_HOOK_URL not configured in environment variables');
       throw new Error('ZAPIER_HOOK_URL not configured');
     }
 
