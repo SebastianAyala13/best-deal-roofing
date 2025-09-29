@@ -9,7 +9,6 @@ import Hero from './components/Hero';
 import VideoSection from './components/VideoSection';
 import WhyChooseUs from './components/WhyChooseUs';
 import TrustSection from './components/TrustSection';
-import Form from './Form';
 import Promotions from './components/Promotions';
 import ReviewSection from './components/ReviewSection';
 import Testimonials from './components/Testimonials';
@@ -121,9 +120,6 @@ export default function Home() {
       <WhyChooseUs />
       <TrustSection />
 
-      <section id="form-section" className="py-20 px-4 bg-transparent">
-        <Form />
-      </section>
 
       {/* Nueva sección de promociones animadas */}
       <Promotions />
