@@ -17,6 +17,7 @@ export default function LeadForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
   const [tfToken, setTfToken] = useState('');
+  const [isNotEligible, setIsNotEligible] = useState(false);
   const tfHiddenRef = useRef<HTMLInputElement>(null);
   const hasSubmitted = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -39,6 +40,7 @@ export default function LeadForm() {
     state: '',
     zip_code: '',
     repair_or_replace: '',
+    ownership: '',
     consent_language: false,
   });
 
@@ -102,10 +104,28 @@ export default function LeadForm() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+
+    // Verificar elegibilidad cuando cambie la propiedad
+    if (name === 'ownership') {
+      if (value === 'no') {
+        setIsNotEligible(true);
+        alert(language === 'es'
+          ? 'Lo sentimos, este formulario es solo para propietarios de vivienda.'
+          : 'Sorry, this form is only for homeowners.');
+      } else {
+        setIsNotEligible(false);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Prevenir envío si no es elegible
+    if (isNotEligible) {
+      console.log('🚫 Form submission blocked - not eligible (not homeowner)');
+      return;
+    }
     
     // Prevenir envíos duplicados
     if (hasSubmitted.current || isSubmitting) {
@@ -200,16 +220,29 @@ export default function LeadForm() {
         id="trusted_form_cert_id"
       />
 
-      <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 text-center">
-        {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
-      </h2>
-      
-      <p className="text-xs text-gray-600 mb-4 text-center">
-        {language === 'es' 
-          ? 'Completa el formulario y nuestro equipo se pondrá en contacto contigo.'
-          : 'Fill out the form and our team will contact you shortly.'
-        }
-      </p>
+      {isNotEligible ? (
+        <div className="text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3">
+            {language === 'es' ? 'No puedes continuar' : 'You cannot proceed'}
+          </h2>
+          <p className="text-sm text-gray-600 mb-4">
+            {language === 'es'
+              ? 'Este formulario está destinado solo para propietarios de vivienda. Si no eres el dueño, no puedes completar esta solicitud.'
+              : 'This form is only for homeowners. If you are not the owner, you cannot complete this request.'}
+          </p>
+        </div>
+      ) : (
+        <>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 text-center">
+            {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
+          </h2>
+          
+          <p className="text-xs text-gray-600 mb-4 text-center">
+            {language === 'es' 
+              ? 'Completa el formulario y nuestro equipo se pondrá en contacto contigo.'
+              : 'Fill out the form and our team will contact you shortly.'
+            }
+          </p>
 
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-1.5" data-tf-element-role="offer">
         {/* First Name */}
@@ -314,7 +347,7 @@ export default function LeadForm() {
 
         {/* Repair or Replace */}
         <div>
-          <p className="text-xs font-medium text-gray-700 mb-1">
+          <p className="text-sm font-medium text-gray-700 mb-1">
             {language === 'es' ? '¿Qué necesitas?' : 'What do you need?'}
           </p>
           <div className="flex gap-3">
@@ -328,7 +361,7 @@ export default function LeadForm() {
                 className="mr-1 text-teal-500 focus:ring-teal-500"
                 required
               />
-              <span className="text-xs text-gray-700">
+              <span className="text-sm text-gray-700">
                 {language === 'es' ? 'Reparación' : 'Repair'}
               </span>
             </label>
@@ -342,8 +375,45 @@ export default function LeadForm() {
                 className="mr-1 text-teal-500 focus:ring-teal-500"
                 required
               />
-              <span className="text-xs text-gray-700">
+              <span className="text-sm text-gray-700">
                 {language === 'es' ? 'Reemplazo' : 'Replace'}
+              </span>
+            </label>
+          </div>
+        </div>
+
+        {/* Ownership */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-1">
+            {language === 'es' ? '¿Eres el propietario?' : 'Are you the homeowner?'}
+          </p>
+          <div className="flex gap-3">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="ownership"
+                value="yes"
+                checked={formData.ownership === 'yes'}
+                onChange={handleInputChange}
+                className="mr-1 text-teal-500 focus:ring-teal-500"
+                required
+              />
+              <span className="text-sm text-gray-700">
+                {language === 'es' ? 'Sí' : 'Yes'}
+              </span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="ownership"
+                value="no"
+                checked={formData.ownership === 'no'}
+                onChange={handleInputChange}
+                className="mr-1 text-teal-500 focus:ring-teal-500"
+                required
+              />
+              <span className="text-sm text-gray-700">
+                {language === 'es' ? 'No' : 'No'}
               </span>
             </label>
           </div>
@@ -382,12 +452,14 @@ export default function LeadForm() {
         )}
       </form>
 
-      {/* TrustedForm Debug Info (only in development) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
-          <p>TrustedForm Token: {tfToken ? 'Captured' : 'Waiting...'}</p>
-          <p className="truncate">URL: {tfToken}</p>
-        </div>
+          {/* TrustedForm Debug Info (only in development) */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
+              <p>TrustedForm Token: {tfToken ? 'Captured' : 'Waiting...'}</p>
+              <p className="truncate">URL: {tfToken}</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
