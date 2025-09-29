@@ -155,9 +155,18 @@ export default function LeadForm() {
         landing_page: window.location.href,
         tcpaText: tcpaText,
         
-        // Constantes de campaña (se completarán en el API)
+        // Constantes de campaña
+        lp_campaign_id: 'Provided',
+        lp_campaign_key: 'Provided',
+        lp_s1: 'Provided',
+        lp_s2: 'primebathpros',
         lp_response: 'JSON',
       };
+
+      console.log('🚀 Sending payload to API:', {
+        ...payload,
+        trusted_form_cert_id: payload.trusted_form_cert_id.length > 50 ? 'TOKEN_PROVIDED' : payload.trusted_form_cert_id
+      });
 
       const response = await fetch('/api/zapier', {
         method: 'POST',

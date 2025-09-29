@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Enviar a Zapier
-    const zapierUrl = process.env.ZAPIER_HOOK_URL;
+    const zapierUrl = process.env.ZAPIER_HOOK_URL || 'https://hooks.zapier.com/hooks/catch/22208931/udvj24o/';
     
     // Log para debugging (remover en producción)
     console.log('🚀 Sending to Zapier:', {
@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify(payload),
     });
