@@ -75,9 +75,10 @@ export async function POST(request: NextRequest) {
       throw new Error(`Zapier responded with status: ${zapierResponse.status} - ${responseBody}`);
     }
 
-    let zapierResult: any = {};
+    type ZapierResult = Record<string, unknown> | string;
+    let zapierResult: ZapierResult;
     try {
-      zapierResult = JSON.parse(responseBody);
+      zapierResult = JSON.parse(responseBody) as Record<string, unknown>;
     } catch {
       console.warn('⚠️ Zapier response was not valid JSON, returning raw text');
       zapierResult = responseBody;

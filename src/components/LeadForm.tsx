@@ -437,28 +437,14 @@ export default function LeadForm() {
 
         {/* TCPA Consent Text */}
         <div className="space-y-1">
-          <input
-            type="hidden"
-            name="consent_language"
-            value="true"
-            readOnly
-          />
-          <label data-tf-element-role="consent-language" className="text-[10px] leading-tight text-gray-600 block">
-            <input
-              type="checkbox"
-              data-tf-element-role="consent-opt-in"
-              className="sr-only"
-              defaultChecked
-              readOnly
-              tabIndex={-1}
-            />
+          <div data-tf-element-role="consent-language" className="text-[10px] leading-tight text-gray-600">
             By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from{' '}
             <span data-tf-element-role="consent-advertiser-name">
               <a className="underline" href="/partners" target="_blank" rel="noreferrer">Home Services Partners</a>
             </span> at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
             <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
             <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>.
-          </label>
+          </div>
         </div>
 
         {/* Submit Button */}
