@@ -53,7 +53,15 @@ export default function LeadForm() {
     // Ya cargamos el script global en layout.tsx con field=trusted_form_cert_id
     const applyFromGlobal = () => {
       try {
-        // Verificar si TrustedForm está disponible
+        // PRIMERO: Leer directamente del campo hidden (TrustedForm ya lo pobló)
+        const hiddenVal = tfHiddenRef.current?.value;
+        if (hiddenVal && hiddenVal !== 'NOT_PROVIDED' && hiddenVal.length > 10) {
+          console.log('✅ TrustedForm token captured from hidden field:', hiddenVal.substring(0, 50) + '...');
+          setTfToken(hiddenVal);
+          return true;
+        }
+        
+        // SEGUNDO: Fallback a getCertUrl si el campo hidden está vacío
         if (!window.TrustedForm) {
           console.log('🔧 TrustedForm not yet available');
           return false;
@@ -68,7 +76,7 @@ export default function LeadForm() {
         console.log('🔧 TrustedForm.getCertUrl() returned:', val);
         
         if (val && val !== 'NOT_PROVIDED' && val.length > 10) {
-          console.log('✅ TrustedForm token captured:', val.substring(0, 50) + '...');
+          console.log('✅ TrustedForm token captured from getCertUrl:', val.substring(0, 50) + '...');
           if (tfHiddenRef.current) tfHiddenRef.current.value = val;
           setTfToken(val);
           return true;
@@ -123,7 +131,15 @@ export default function LeadForm() {
     // Espera hasta 8s con polling cada 200ms para capturar token
     const start = Date.now();
     const poll = async () => {
+      // PRIMERO: Leer directamente del campo hidden
       const hiddenVal = tfHiddenRef.current?.value || '';
+      if (hiddenVal && hiddenVal !== 'NOT_PROVIDED' && hiddenVal.length > 10) {
+        console.log('✅ TrustedForm token found in poll (hidden field):', hiddenVal.substring(0, 50) + '...');
+        setTfToken(hiddenVal);
+        return hiddenVal;
+      }
+      
+      // SEGUNDO: Fallback a getCertUrl
       let fromApi = '';
       try { 
         if (window.TrustedForm && window.TrustedForm.getCertUrl) {
@@ -134,15 +150,14 @@ export default function LeadForm() {
         console.error('❌ Error getting TrustedForm token in poll:', error);
       }
       
-      const val = hiddenVal || fromApi;
-      console.log('🔧 waitForTrustedFormToken - checking values:', { hiddenVal, fromApi, final: val });
-      
-      if (val && val !== 'NOT_PROVIDED' && val.length > 10) {
-        console.log('✅ TrustedForm token found in poll:', val.substring(0, 50) + '...');
-        if (!hiddenVal && tfHiddenRef.current) tfHiddenRef.current.value = val;
-        setTfToken(val);
-        return val;
+      if (fromApi && fromApi !== 'NOT_PROVIDED' && fromApi.length > 10) {
+        console.log('✅ TrustedForm token found in poll (getCertUrl):', fromApi.substring(0, 50) + '...');
+        if (tfHiddenRef.current) tfHiddenRef.current.value = fromApi;
+        setTfToken(fromApi);
+        return fromApi;
       }
+      
+      console.log('🔧 waitForTrustedFormToken - checking values:', { hiddenVal, fromApi });
       
       if (Date.now() - start >= maxWaitMs) {
         console.warn('⚠️ TrustedForm token timeout after', maxWaitMs, 'ms');
