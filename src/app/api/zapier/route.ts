@@ -10,6 +10,20 @@ export async function POST(request: NextRequest) {
                request.headers.get('x-real-ip') || 
                'unknown';
 
+    // Normalizar TrustedForm token desde distintas posibles llaves
+    const trustedFormToken = (
+      body.trusted_form_cert_id ||
+      body.trustedform_cert_url ||
+      body.trustedform_cert_id ||
+      body.TrustedFormCertUrl ||
+      body.TrustedFormCertURL ||
+      body.xxTrustedFormCertUrl ||
+      body.xxTrustedFormToken ||
+      body.trusted_form_token ||
+      body.trusted_form_url ||
+      ''
+    ) as string;
+
     // Payload completo enviado a Zapier
     const payload = {
       // Constantes de campaña
@@ -31,7 +45,14 @@ export async function POST(request: NextRequest) {
       
       // Metadatos y tracking
       ip_address: ip,
-      trusted_form_cert_id: body.trusted_form_cert_id ?? 'NOT_PROVIDED',
+      trusted_form_cert_id: trustedFormToken || 'NOT_PROVIDED',
+      // Alias comunes para compatibilidad con diferentes Zaps o mapeos
+      trustedform_cert_url: trustedFormToken || 'NOT_PROVIDED',
+      TrustedFormCertUrl: trustedFormToken || 'NOT_PROVIDED',
+      xxTrustedFormCertUrl: trustedFormToken || 'NOT_PROVIDED',
+      xxTrustedFormToken: trustedFormToken || 'NOT_PROVIDED',
+      trusted_form_token: trustedFormToken || 'NOT_PROVIDED',
+      trusted_form_url: trustedFormToken || 'NOT_PROVIDED',
       landing_page: body.landing_page ?? '',
       
       // Servicio y consentimiento
