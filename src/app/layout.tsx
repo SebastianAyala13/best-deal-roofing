@@ -73,106 +73,50 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
         {/* End Google Tag Manager */}
         
-        {/* TrustedForm Script */}
+        {/* TrustedForm Lead Tracking - Professional Implementation */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function() {
-              console.log('🔧 Loading TrustedForm script...');
-              
-              // Crear el objeto TrustedForm global antes de cargar el script
-              window.TrustedForm = window.TrustedForm || {};
-              
+              // TrustedForm Lead Tracking
               var tf = document.createElement('script');
               tf.type = 'text/javascript';
               tf.async = true;
-              tf.src = 'https://api.trustedform.com/trustedform.js?field=trusted_form_cert_id&l=' + 
-                       new Date().getTime() + Math.random();
-              
-              tf.onload = function() {
-                console.log('✅ TrustedForm script loaded successfully');
-                
-                // Esperar un poco más para que TrustedForm se inicialice
-                setTimeout(function() {
-                  console.log('🔧 TrustedForm object after load:', typeof window.TrustedForm);
-                  console.log('🔧 TrustedForm object:', window.TrustedForm);
-                  
-                  if (window.TrustedForm && typeof window.TrustedForm === 'object') {
-                    console.log('🔧 TrustedForm methods:', Object.keys(window.TrustedForm));
-                    
-                    // Intentar inicializar manualmente si es necesario
-                    if (window.TrustedForm.init && typeof window.TrustedForm.init === 'function') {
-                      try {
-                        window.TrustedForm.init();
-                        console.log('✅ TrustedForm manually initialized');
-                      } catch (e) {
-                        console.log('🔧 TrustedForm init failed:', e);
-                      }
-                    }
-                  } else {
-                    console.log('❌ TrustedForm object not properly created');
-                  }
-                }, 2000);
-              };
-              
-              tf.onerror = function() {
-                console.error('❌ TrustedForm script failed to load');
-              };
-              
-              var s = document.getElementsByTagName('script')[0];
+              tf.src = (("https:" == document.location.protocol) ? 'https' : 'http') +
+                '://api.trustedform.com/trustedform.js?field=trusted_form_cert_id&use_tagged_consent=true&l=' +
+                (new Date().getTime() + Math.random());
+              var s = document.getElementsByTagName('script')[0]; 
               s.parentNode.insertBefore(tf, s);
+              
+              // Enhanced tracking for form interactions
+              document.addEventListener('DOMContentLoaded', function() {
+                // Track form focus events
+                var forms = document.querySelectorAll('form');
+                forms.forEach(function(form) {
+                  var inputs = form.querySelectorAll('input, select, textarea');
+                  inputs.forEach(function(input) {
+                    input.addEventListener('focus', function() {
+                      if (window.TrustedForm) {
+                        window.TrustedForm.tag();
+                      }
+                    });
+                  });
+                });
+                
+                // Track form submission attempts
+                document.addEventListener('submit', function(e) {
+                  if (window.TrustedForm) {
+                    window.TrustedForm.tag();
+                  }
+                });
+              });
             })();`,
           }}
         />
+        {/* TrustedForm pixel tracking */}
+        <img src='https://api.trustedform.com/ns.gif' />
         {/* End TrustedForm Script */}
         
-        {/* TrustedForm Alternative Implementation */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function() {
-              console.log('🔧 Setting up TrustedForm alternative implementation...');
-              
-              // Función para crear un token de TrustedForm manualmente
-              function createTrustedFormToken() {
-                try {
-                  // Crear un token único basado en timestamp y random
-                  var timestamp = new Date().getTime();
-                  var random = Math.random().toString(36).substring(2);
-                  var token = 'tf_' + timestamp + '_' + random;
-                  
-                  console.log('🔧 Created manual TrustedForm token:', token);
-                  
-                  // Crear el objeto TrustedForm si no existe
-                  if (!window.TrustedForm) {
-                    window.TrustedForm = {
-                      getCertUrl: function() {
-                        return token;
-                      },
-                      init: function() {
-                        console.log('🔧 Manual TrustedForm init called');
-                      }
-                    };
-                    console.log('✅ Manual TrustedForm object created');
-                  }
-                  
-                  return token;
-                } catch (error) {
-                  console.error('❌ Error creating manual TrustedForm token:', error);
-                  return 'NOT_PROVIDED';
-                }
-              }
-              
-              // Crear el token después de un delay
-              setTimeout(function() {
-                if (!window.TrustedForm || !window.TrustedForm.getCertUrl) {
-                  console.log('🔧 Creating fallback TrustedForm implementation...');
-                  createTrustedFormToken();
-                }
-              }, 3000);
-              
-            })();`,
-          }}
-        />
-        {/* End TrustedForm Alternative Implementation */}
+        {/* Removed alternative manual TF implementation to match Premium-bathrooms pattern */}
         
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#14b8a6" />

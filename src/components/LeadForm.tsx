@@ -44,132 +44,45 @@ export default function LeadForm() {
     consent_language: true,
   });
 
-  // TrustedForm Integration
+  // TrustedForm Integration (Patrón exacto solicitado)
   useEffect(() => {
     if (!tfHiddenRef.current) return;
-    
-    console.log('🔧 Setting up TrustedForm token capture...');
-    
-    // Ya cargamos el script global en layout.tsx con field=trusted_form_cert_id
+
     const applyFromGlobal = () => {
       try {
-        // PRIMERO: Leer directamente del campo hidden (TrustedForm ya lo pobló)
-        const hiddenVal = tfHiddenRef.current?.value;
-        if (hiddenVal && hiddenVal !== 'NOT_PROVIDED' && hiddenVal.length > 10) {
-          console.log('✅ TrustedForm token captured from hidden field:', hiddenVal.substring(0, 50) + '...');
-          setTfToken(hiddenVal);
-          return true;
-        }
-        
-        // SEGUNDO: Fallback a getCertUrl si el campo hidden está vacío
-        if (!window.TrustedForm) {
-          console.log('🔧 TrustedForm not yet available');
-          return false;
-        }
-        
-        if (!window.TrustedForm.getCertUrl) {
-          console.log('🔧 TrustedForm.getCertUrl not yet available');
-          return false;
-        }
-        
-        const val = window.TrustedForm.getCertUrl();
-        console.log('🔧 TrustedForm.getCertUrl() returned:', val);
-        
-        if (val && val !== 'NOT_PROVIDED' && val.length > 10) {
-          console.log('✅ TrustedForm token captured from getCertUrl:', val.substring(0, 50) + '...');
+        const val = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
+        if (val) {
           if (tfHiddenRef.current) tfHiddenRef.current.value = val;
           setTfToken(val);
-          return true;
-        } else {
-          console.log('🔧 TrustedForm token not ready yet:', val);
         }
-      } catch (error) {
-        console.error('❌ Error getting TrustedForm token:', error);
-      }
-      return false;
+      } catch {}
     };
 
-    // Intentar inmediatamente
     applyFromGlobal();
-    
-    // Observer para cambios en el campo hidden
+
     const obs = new MutationObserver(() => {
-      if (tfHiddenRef.current?.value && tfHiddenRef.current.value !== 'NOT_PROVIDED') {
-        console.log('✅ TrustedForm token updated via observer:', tfHiddenRef.current.value.substring(0, 50) + '...');
-        setTfToken(tfHiddenRef.current.value);
-      }
+      if (tfHiddenRef.current?.value) setTfToken(tfHiddenRef.current.value);
     });
-    
     obs.observe(tfHiddenRef.current, { attributes: true, attributeFilter: ['value'] });
-    
-    // Polling cada 500ms por hasta 15 segundos
-    let attempts = 0;
-    const maxAttempts = 30;
-    const id = setInterval(() => {
-      attempts++;
-      console.log(`🔧 TrustedForm polling attempt ${attempts}/${maxAttempts}`);
-      if (applyFromGlobal() || attempts >= maxAttempts) {
-        clearInterval(id);
-        if (attempts >= maxAttempts) {
-          console.warn('⚠️ TrustedForm token not captured after 15 seconds');
-          console.log('🔧 Final TrustedForm state:', {
-            available: !!window.TrustedForm,
-            getCertUrl: !!(window.TrustedForm && window.TrustedForm.getCertUrl),
-            currentValue: tfHiddenRef.current?.value
-          });
-        }
-      }
-    }, 500);
-    
-    return () => { 
-      obs.disconnect(); 
-      clearInterval(id); 
-    };
+
+    const id = setInterval(applyFromGlobal, 300);
+    return () => { obs.disconnect(); clearInterval(id); };
   }, []);
 
-  async function waitForTrustedFormToken(maxWaitMs = 8000) {
-    // Espera hasta 8s con polling cada 200ms para capturar token
+  async function waitForTrustedFormToken(maxWaitMs = 2000) {
     const start = Date.now();
-    const poll = async () => {
-      // PRIMERO: Leer directamente del campo hidden
+    const poll = async (): Promise<string> => {
       const hiddenVal = tfHiddenRef.current?.value || '';
-      if (hiddenVal && hiddenVal !== 'NOT_PROVIDED' && hiddenVal.length > 10) {
-        console.log('✅ TrustedForm token found in poll (hidden field):', hiddenVal.substring(0, 50) + '...');
-        setTfToken(hiddenVal);
-        return hiddenVal;
-      }
-      
-      // SEGUNDO: Fallback a getCertUrl
       let fromApi = '';
-      try { 
-        if (window.TrustedForm && window.TrustedForm.getCertUrl) {
-          fromApi = window.TrustedForm.getCertUrl() || '';
-          console.log('🔧 waitForTrustedFormToken - getCertUrl returned:', fromApi);
-        }
-      } catch (error) {
-        console.error('❌ Error getting TrustedForm token in poll:', error);
+      try { fromApi = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || ''; } catch {}
+      const val = hiddenVal || fromApi;
+      if (val) {
+        if (!hiddenVal && tfHiddenRef.current) tfHiddenRef.current.value = val;
+        setTfToken(val);
+        return val;
       }
-      
-      if (fromApi && fromApi !== 'NOT_PROVIDED' && fromApi.length > 10) {
-        console.log('✅ TrustedForm token found in poll (getCertUrl):', fromApi.substring(0, 50) + '...');
-        if (tfHiddenRef.current) tfHiddenRef.current.value = fromApi;
-        setTfToken(fromApi);
-        return fromApi;
-      }
-      
-      console.log('🔧 waitForTrustedFormToken - checking values:', { hiddenVal, fromApi });
-      
-      if (Date.now() - start >= maxWaitMs) {
-        console.warn('⚠️ TrustedForm token timeout after', maxWaitMs, 'ms');
-        console.log('🔧 Timeout state:', {
-          hiddenVal,
-          fromApi,
-          TrustedFormAvailable: !!window.TrustedForm,
-          getCertUrlAvailable: !!(window.TrustedForm && window.TrustedForm.getCertUrl)
-        });
-        return '';
-      }
-      await new Promise(r => setTimeout(r, 200));
+      if (Date.now() - start >= maxWaitMs) return '';
+      await new Promise(r => setTimeout(r, 150));
       return poll();
     };
     return poll();
@@ -216,8 +129,10 @@ export default function LeadForm() {
     setSubmitStatus(null);
 
     try {
-      // Esperar por el token de TrustedForm
-      const trustedFormToken = await waitForTrustedFormToken();
+      // Esperar por el token de TrustedForm (hasta 2s)
+      await waitForTrustedFormToken(2000);
+      const f = new FormData(e.currentTarget);
+      const trustedFormToken = (tfHiddenRef.current?.value || tfToken || (f.get('trusted_form_cert_id')?.toString() || ''));
       
       // TCPA Text completo
       const tcpaText = "By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from Home Services Partners at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the Privacy Policy and Terms & Conditions.";
