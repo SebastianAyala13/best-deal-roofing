@@ -166,7 +166,7 @@ export default function Home() {
       <section id="faq" className="relative py-20 px-4 text-white bg-white/10 backdrop-blur-md">
         <div className="absolute inset-0 -z-10">
           <img
-            src="/background-video-blur.jpg"
+            src="/bg-promo.jpg"
             alt=""
             className="w-full h-full object-cover opacity-20"
           />

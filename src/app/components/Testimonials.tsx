@@ -63,7 +63,7 @@ export default function Testimonials() {
       {/* Fondo visual */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/background-video-blur.jpg"
+          src="/bg-promo.jpg"
           alt="Background"
           className="w-full h-full object-cover opacity-20"
         />

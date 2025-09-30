@@ -23,6 +23,9 @@ const nextConfig: NextConfig = {
       },
     ];
 
+    // Comentado temporalmente para permitir que TrustedForm funcione
+    // Los headers COEP/COOP bloquean scripts externos como TrustedForm
+    /*
     if (process.env.NODE_ENV !== 'development') {
       headers.push({
         source: '/(.*)',
@@ -38,6 +41,7 @@ const nextConfig: NextConfig = {
         ],
       });
     }
+    */
 
     return headers;
   },

@@ -13,7 +13,7 @@ export default function VideoSection() {
       {/* Imagen de fondo difuminada */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/background-video-blur.jpg"
+          src="/bg-promo.jpg"
           alt=""
           className="w-full h-full object-cover opacity-20"
         />
