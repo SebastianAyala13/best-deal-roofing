@@ -48,25 +48,49 @@ export default function LeadForm() {
   useEffect(() => {
     if (!tfHiddenRef.current) return;
     
+    console.log('🔧 Setting up TrustedForm token capture...');
+    
     // Ya cargamos el script global en layout.tsx con field=trusted_form_cert_id
     const applyFromGlobal = () => {
       try {
         const val = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
-        if (val) {
+        if (val && val !== 'NOT_PROVIDED') {
+          console.log('✅ TrustedForm token captured:', val.substring(0, 50) + '...');
           if (tfHiddenRef.current) tfHiddenRef.current.value = val;
           setTfToken(val);
+          return true;
         }
-      } catch {}
+      } catch (error) {
+        console.error('❌ Error getting TrustedForm token:', error);
+      }
+      return false;
     };
 
+    // Intentar inmediatamente
     applyFromGlobal();
     
+    // Observer para cambios en el campo hidden
     const obs = new MutationObserver(() => {
-      if (tfHiddenRef.current?.value) setTfToken(tfHiddenRef.current.value);
+      if (tfHiddenRef.current?.value && tfHiddenRef.current.value !== 'NOT_PROVIDED') {
+        console.log('✅ TrustedForm token updated via observer:', tfHiddenRef.current.value.substring(0, 50) + '...');
+        setTfToken(tfHiddenRef.current.value);
+      }
     });
     
     obs.observe(tfHiddenRef.current, { attributes: true, attributeFilter: ['value'] });
-    const id = setInterval(applyFromGlobal, 300);
+    
+    // Polling cada 500ms por hasta 10 segundos
+    let attempts = 0;
+    const maxAttempts = 20;
+    const id = setInterval(() => {
+      attempts++;
+      if (applyFromGlobal() || attempts >= maxAttempts) {
+        clearInterval(id);
+        if (attempts >= maxAttempts) {
+          console.warn('⚠️ TrustedForm token not captured after 10 seconds');
+        }
+      }
+    }, 500);
     
     return () => { 
       obs.disconnect(); 
@@ -74,25 +98,31 @@ export default function LeadForm() {
     };
   }, []);
 
-  async function waitForTrustedFormToken(maxWaitMs = 2000) {
-    // Espera hasta 2s con polling cada 150ms para capturar token
+  async function waitForTrustedFormToken(maxWaitMs = 5000) {
+    // Espera hasta 5s con polling cada 200ms para capturar token
     const start = Date.now();
     const poll = async () => {
       const hiddenVal = tfHiddenRef.current?.value || '';
       let fromApi = '';
       try { 
         fromApi = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
-      } catch {}
+      } catch (error) {
+        console.error('❌ Error getting TrustedForm token in poll:', error);
+      }
       
       const val = hiddenVal || fromApi;
-      if (val) {
+      if (val && val !== 'NOT_PROVIDED') {
+        console.log('✅ TrustedForm token found in poll:', val.substring(0, 50) + '...');
         if (!hiddenVal && tfHiddenRef.current) tfHiddenRef.current.value = val;
         setTfToken(val);
         return val;
       }
       
-      if (Date.now() - start >= maxWaitMs) return '';
-      await new Promise(r => setTimeout(r, 150));
+      if (Date.now() - start >= maxWaitMs) {
+        console.warn('⚠️ TrustedForm token timeout after', maxWaitMs, 'ms');
+        return '';
+      }
+      await new Promise(r => setTimeout(r, 200));
       return poll();
     };
     return poll();

@@ -77,11 +77,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script
           dangerouslySetInnerHTML={{
             __html: `(function() {
+              console.log('🔧 Loading TrustedForm script...');
               var tf = document.createElement('script');
               tf.type = 'text/javascript';
               tf.async = true;
-              tf.src = '//api.trustedform.com/trustedform.js?field=trusted_form_cert_id&use_tagged_consent=true&l=' + 
+              tf.src = 'https://api.trustedform.com/trustedform.js?field=trusted_form_cert_id&use_tagged_consent=true&l=' + 
                        new Date().getTime() + Math.random();
+              tf.onload = function() {
+                console.log('✅ TrustedForm script loaded successfully');
+              };
+              tf.onerror = function() {
+                console.error('❌ TrustedForm script failed to load');
+              };
               var s = document.getElementsByTagName('script')[0];
               s.parentNode.insertBefore(tf, s);
             })();`,
