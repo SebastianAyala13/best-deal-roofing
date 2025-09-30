@@ -112,8 +112,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             })();`,
           }}
         />
-        {/* TrustedForm pixel tracking */}
-        <img src='https://api.trustedform.com/ns.gif' />
         {/* End TrustedForm Script */}
         
         {/* Removed alternative manual TF implementation to match Premium-bathrooms pattern */}
@@ -135,6 +133,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             width="0"
             style={{ display: 'none', visibility: 'hidden' }}
           />
+        </noscript>
+        {/* TrustedForm pixel tracking (noscript) */}
+        <noscript>
+          <img src="https://api.trustedform.com/ns.gif" />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
         
