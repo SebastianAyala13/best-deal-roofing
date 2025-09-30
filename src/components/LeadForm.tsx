@@ -53,12 +53,27 @@ export default function LeadForm() {
     // Ya cargamos el script global en layout.tsx con field=trusted_form_cert_id
     const applyFromGlobal = () => {
       try {
-        const val = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
-        if (val && val !== 'NOT_PROVIDED') {
+        // Verificar si TrustedForm está disponible
+        if (!window.TrustedForm) {
+          console.log('🔧 TrustedForm not yet available');
+          return false;
+        }
+        
+        if (!window.TrustedForm.getCertUrl) {
+          console.log('🔧 TrustedForm.getCertUrl not yet available');
+          return false;
+        }
+        
+        const val = window.TrustedForm.getCertUrl();
+        console.log('🔧 TrustedForm.getCertUrl() returned:', val);
+        
+        if (val && val !== 'NOT_PROVIDED' && val.length > 10) {
           console.log('✅ TrustedForm token captured:', val.substring(0, 50) + '...');
           if (tfHiddenRef.current) tfHiddenRef.current.value = val;
           setTfToken(val);
           return true;
+        } else {
+          console.log('🔧 TrustedForm token not ready yet:', val);
         }
       } catch (error) {
         console.error('❌ Error getting TrustedForm token:', error);
@@ -79,15 +94,21 @@ export default function LeadForm() {
     
     obs.observe(tfHiddenRef.current, { attributes: true, attributeFilter: ['value'] });
     
-    // Polling cada 500ms por hasta 10 segundos
+    // Polling cada 500ms por hasta 15 segundos
     let attempts = 0;
-    const maxAttempts = 20;
+    const maxAttempts = 30;
     const id = setInterval(() => {
       attempts++;
+      console.log(`🔧 TrustedForm polling attempt ${attempts}/${maxAttempts}`);
       if (applyFromGlobal() || attempts >= maxAttempts) {
         clearInterval(id);
         if (attempts >= maxAttempts) {
-          console.warn('⚠️ TrustedForm token not captured after 10 seconds');
+          console.warn('⚠️ TrustedForm token not captured after 15 seconds');
+          console.log('🔧 Final TrustedForm state:', {
+            available: !!window.TrustedForm,
+            getCertUrl: !!(window.TrustedForm && window.TrustedForm.getCertUrl),
+            currentValue: tfHiddenRef.current?.value
+          });
         }
       }
     }, 500);
@@ -98,20 +119,25 @@ export default function LeadForm() {
     };
   }, []);
 
-  async function waitForTrustedFormToken(maxWaitMs = 5000) {
-    // Espera hasta 5s con polling cada 200ms para capturar token
+  async function waitForTrustedFormToken(maxWaitMs = 8000) {
+    // Espera hasta 8s con polling cada 200ms para capturar token
     const start = Date.now();
     const poll = async () => {
       const hiddenVal = tfHiddenRef.current?.value || '';
       let fromApi = '';
       try { 
-        fromApi = (window.TrustedForm && window.TrustedForm.getCertUrl && window.TrustedForm.getCertUrl()) || '';
+        if (window.TrustedForm && window.TrustedForm.getCertUrl) {
+          fromApi = window.TrustedForm.getCertUrl() || '';
+          console.log('🔧 waitForTrustedFormToken - getCertUrl returned:', fromApi);
+        }
       } catch (error) {
         console.error('❌ Error getting TrustedForm token in poll:', error);
       }
       
       const val = hiddenVal || fromApi;
-      if (val && val !== 'NOT_PROVIDED') {
+      console.log('🔧 waitForTrustedFormToken - checking values:', { hiddenVal, fromApi, final: val });
+      
+      if (val && val !== 'NOT_PROVIDED' && val.length > 10) {
         console.log('✅ TrustedForm token found in poll:', val.substring(0, 50) + '...');
         if (!hiddenVal && tfHiddenRef.current) tfHiddenRef.current.value = val;
         setTfToken(val);
@@ -120,6 +146,12 @@ export default function LeadForm() {
       
       if (Date.now() - start >= maxWaitMs) {
         console.warn('⚠️ TrustedForm token timeout after', maxWaitMs, 'ms');
+        console.log('🔧 Timeout state:', {
+          hiddenVal,
+          fromApi,
+          TrustedFormAvailable: !!window.TrustedForm,
+          getCertUrlAvailable: !!(window.TrustedForm && window.TrustedForm.getCertUrl)
+        });
         return '';
       }
       await new Promise(r => setTimeout(r, 200));
