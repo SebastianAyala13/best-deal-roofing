@@ -290,13 +290,6 @@ export default function LeadForm() {
 
   return (
     <div id="lead-form" className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl max-w-md mx-auto">
-      {/* TrustedForm Hidden Field */}
-      <input
-        ref={tfHiddenRef}
-        type="hidden"
-        name="trusted_form_cert_id"
-        id="trusted_form_cert_id"
-      />
 
       {isNotEligible ? (
         <div className="text-center">
@@ -323,6 +316,15 @@ export default function LeadForm() {
           </p>
 
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-1.5" data-tf-element-role="offer">
+        {/* TrustedForm Hidden Field - Must be inside form */}
+        <input
+          ref={tfHiddenRef}
+          type="hidden"
+          name="trusted_form_cert_id"
+          id="trusted_form_cert_id"
+          value=""
+        />
+        
         {/* First Name */}
         <div>
           <input
