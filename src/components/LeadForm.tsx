@@ -131,7 +131,7 @@ export default function LeadForm() {
     try {
       // Esperar por el token de TrustedForm (hasta 2s)
       await waitForTrustedFormToken(2000);
-      const f = new FormData(e.currentTarget);
+      const f = new FormData(formRef.current!);
       const trustedFormToken = (tfHiddenRef.current?.value || tfToken || (f.get('trusted_form_cert_id')?.toString() || ''));
       
       // TCPA Text completo
