@@ -206,9 +206,9 @@ export default function LeadForm() {
       } else {
         const errorText = await response.text();
         console.error('❌ API Error Response Text:', errorText);
-        let errorData: any = {};
+        let errorData: Record<string, unknown> = {};
         try {
-          errorData = JSON.parse(errorText);
+          errorData = JSON.parse(errorText) as Record<string, unknown>;
         } catch {}
         console.error('❌ API Error Response:', {
           status: response.status,
