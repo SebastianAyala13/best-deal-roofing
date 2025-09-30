@@ -81,10 +81,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               var tf = document.createElement('script');
               tf.type = 'text/javascript';
               tf.async = true;
-              tf.src = 'https://api.trustedform.com/trustedform.js?field=trusted_form_cert_id&use_tagged_consent=true&l=' + 
+              tf.src = 'https://api.trustedform.com/trustedform.js?field=trusted_form_cert_id&l=' + 
                        new Date().getTime() + Math.random();
               tf.onload = function() {
                 console.log('✅ TrustedForm script loaded successfully');
+                // Verificar si TrustedForm se inicializó correctamente
+                setTimeout(function() {
+                  console.log('🔧 TrustedForm object after load:', typeof window.TrustedForm);
+                  if (window.TrustedForm) {
+                    console.log('🔧 TrustedForm methods:', Object.keys(window.TrustedForm));
+                  }
+                }, 1000);
               };
               tf.onerror = function() {
                 console.error('❌ TrustedForm script failed to load');
@@ -95,6 +102,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         {/* End TrustedForm Script */}
+        
+        {/* TrustedForm Initialization */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function() {
+              // Función para inicializar TrustedForm cuando esté disponible
+              function initTrustedForm() {
+                if (window.TrustedForm && window.TrustedForm.init) {
+                  console.log('🔧 Initializing TrustedForm...');
+                  try {
+                    window.TrustedForm.init();
+                    console.log('✅ TrustedForm initialized successfully');
+                  } catch (error) {
+                    console.error('❌ Error initializing TrustedForm:', error);
+                  }
+                } else {
+                  console.log('🔧 TrustedForm not ready for initialization yet');
+                  setTimeout(initTrustedForm, 500);
+                }
+              }
+              
+              // Inicializar cuando el DOM esté listo
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initTrustedForm);
+              } else {
+                initTrustedForm();
+              }
+            })();`,
+          }}
+        />
+        {/* End TrustedForm Initialization */}
         
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#14b8a6" />
