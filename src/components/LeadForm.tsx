@@ -41,7 +41,7 @@ export default function LeadForm() {
     zip_code: '',
     repair_or_replace: '',
     ownership: '',
-    consent_language: false,
+    consent_language: true,
   });
 
   // TrustedForm Integration
@@ -156,10 +156,6 @@ export default function LeadForm() {
         tcpaText: tcpaText,
         
         // Constantes de campaña
-        lp_campaign_id: 'Provided',
-        lp_campaign_key: 'Provided',
-        lp_s1: 'Provided',
-        lp_s2: 'primebathpros',
         lp_response: 'JSON',
       };
 
@@ -208,7 +204,12 @@ export default function LeadForm() {
         // Redirect to thank you page
         window.location.href = '/thank-you';
       } else {
-        const errorData = await response.json().catch(() => ({}));
+        const errorText = await response.text();
+        console.error('❌ API Error Response Text:', errorText);
+        let errorData: any = {};
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {}
         console.error('❌ API Error Response:', {
           status: response.status,
           statusText: response.statusText,
@@ -436,14 +437,28 @@ export default function LeadForm() {
 
         {/* TCPA Consent Text */}
         <div className="space-y-1">
-          <div data-tf-element-role="consent-language" className="text-[10px] leading-tight text-gray-600">
+          <input
+            type="hidden"
+            name="consent_language"
+            value="true"
+            readOnly
+          />
+          <label data-tf-element-role="consent-language" className="text-[10px] leading-tight text-gray-600 block">
+            <input
+              type="checkbox"
+              data-tf-element-role="consent-opt-in"
+              className="sr-only"
+              defaultChecked
+              readOnly
+              tabIndex={-1}
+            />
             By clicking Submit, You agree to give express consent to receive marketing communications regarding Home Improvement services by automatic dialing system and pre-recorded calls and artificial voice messages from{' '}
             <span data-tf-element-role="consent-advertiser-name">
               <a className="underline" href="/partners" target="_blank" rel="noreferrer">Home Services Partners</a>
             </span> at the phone number and E-mail address provided by you, including wireless numbers, if applicable, even if you have previously registered the provided number on the Do not Call Registry. SMS/MMS and data messaging rates may apply. You understand that my consent here is not a condition for buying any goods or services. You agree to the{' '}
             <a className="underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a> and{' '}
             <a className="underline ml-1" href="/terms-conditions" target="_blank" rel="noreferrer">Terms & Conditions</a>.
-          </div>
+          </label>
         </div>
 
         {/* Submit Button */}

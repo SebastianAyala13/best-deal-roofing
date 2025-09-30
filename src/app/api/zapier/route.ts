@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Enviar a Zapier
-    const zapierUrl = process.env.ZAPIER_HOOK_URL || 'https://hooks.zapier.com/hooks/catch/22208931/udvj24o/';
+    const zapierUrl = process.env.ZAPIER_HOOK_URL;
     
     // Log para debugging (remover en producción)
     console.log('🚀 Sending to Zapier:', {
@@ -68,13 +68,21 @@ export async function POST(request: NextRequest) {
     console.log('📊 Zapier Response Status:', zapierResponse.status);
     console.log('📊 Zapier Response OK:', zapierResponse.ok);
 
+    const responseBody = await zapierResponse.text();
+    console.log('📄 Zapier Response Body:', responseBody);
     if (!zapierResponse.ok) {
-      const errorText = await zapierResponse.text();
-      console.error('❌ Zapier Error Response:', errorText);
-      throw new Error(`Zapier responded with status: ${zapierResponse.status} - ${errorText}`);
+      console.error('❌ Zapier Error Response:', responseBody);
+      throw new Error(`Zapier responded with status: ${zapierResponse.status} - ${responseBody}`);
     }
 
-    const zapierResult = await zapierResponse.json();
+    let zapierResult: any = {};
+    try {
+      zapierResult = JSON.parse(responseBody);
+    } catch {
+      console.warn('⚠️ Zapier response was not valid JSON, returning raw text');
+      zapierResult = responseBody;
+    }
+
     console.log('✅ Zapier Success Response:', zapierResult);
 
     return NextResponse.json({

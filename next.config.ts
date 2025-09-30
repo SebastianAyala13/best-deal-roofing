@@ -3,20 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Configuración para optimizar videos en producción
   async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-        ],
-      },
+    const headers = [
       {
         source: '/:path*.mp4',
         headers: [
@@ -35,6 +22,24 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+
+    if (process.env.NODE_ENV !== 'development') {
+      headers.push({
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+        ],
+      });
+    }
+
+    return headers;
   },
 
   // Optimización de imágenes y assets
