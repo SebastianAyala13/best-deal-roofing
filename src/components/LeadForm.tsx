@@ -235,7 +235,7 @@ export default function LeadForm() {
       ) : (
         <>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 text-center">
-            {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Bathroom Quote'}
+            {language === 'es' ? 'Obtén tu Cotización Gratuita' : 'Get Your Free Roofing Quote'}
           </h2>
           
           <p className="text-xs text-gray-600 mb-4 text-center">
